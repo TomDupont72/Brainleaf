@@ -6,6 +6,12 @@ import { motion, AnimatePresence } from "framer-motion"
 import { authClient } from "@/lib/auth-client"
 import { useNavigate } from "react-router-dom"
 
+type SignUpPayload = {
+    email: string,
+    password: string,
+    name: string
+}
+
 export default function Authentification() {
     const navigate = useNavigate();
 
@@ -62,7 +68,7 @@ export default function Authentification() {
                 email: emailR,
                 password: passwordR,
                 name: usernameR,
-            } as any)
+            } as SignUpPayload)
 
             if (res?.error) {
                 setError(res.error.message ?? "Impossible de se connecter.")
@@ -98,7 +104,8 @@ export default function Authentification() {
                         <Input id="emailSI" type="email" value={emailSI} onChange={(e) => setEmailSI(e.target.value)} required></Input>
                         <FieldLabel htmlFor="passwordSI">Mot de passe</FieldLabel>
                         <InputPassword id="passwordSI" value={passwordSI} onChange={(e) => setPasswordSI(e.target.value)}></InputPassword>
-                        <Button type="submit" variant="outline">Se connecter</Button>
+                        {error ? <p className="text-md font-semi">{error}</p> : null}
+                        <Button type="submit" variant="outline" disabled={loading}>Se connecter</Button>
                     </form>
                 </Card>
                 <div className="flex flex-row items-center justify-center">
@@ -128,7 +135,8 @@ export default function Authentification() {
                             <InputPassword id="passwordR" value={passwordR} onChange={(e) => setPasswordR(e.target.value)}></InputPassword>
                             <FieldLabel htmlFor="passwordConfirmR">Confirmer le mot de passe</FieldLabel>
                             <InputPassword id="passwordConfirmR" value={passwordConfirmR} onChange={(e) => setPasswordConfirmR(e.target.value)}></InputPassword>
-                            <Button type="submit" variant="outline">S'inscrire</Button>
+                            {error ? <p className="text-md font-semi">{error}</p> : null}
+                            <Button type="submit" variant="outline"  disabled={loading}>S'inscrire</Button>
                         </form>
                     </Card>
                     <div className="flex flex-row items-center justify-center">

@@ -6,7 +6,7 @@ type InputPasswordProps = React.InputHTMLAttributes<HTMLInputElement> & {
   id: string
 };
 
-export default function InputPassword({ id, className, ...props }: InputPasswordProps) {
+export default function InputPassword({ id, ...props }: InputPasswordProps) {
     const [show, setShow] = useState(false);
 
     return (
