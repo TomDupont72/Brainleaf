@@ -28,11 +28,8 @@ jobs:
       - name: Lint
         run: npm run lint --if-present
 
-      # Génère coverage/lcov.info si tes tests supportent --coverage
       - name: Test (with coverage)
-        run: npm test -- --coverage
-        # Si tu n'as pas de tests pour l'instant, remplace par:
-        # run: npm test --if-present -- --coverage
+        run: npm run test --if-present -- --coverage
 
       - name: Build
         run: npm run build
@@ -71,9 +68,7 @@ jobs:
         run: npm run lint --if-present
 
       - name: Test (with coverage)
-        run: npm test -- --coverage
-        # Si tu n'as pas de tests pour l'instant, remplace par:
-        # run: npm test --if-present -- --coverage
+        run: npm run test --if-present -- --coverage
 
       - name: Build
         run: npm run build
@@ -100,10 +95,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: .
-
-      # À ce stade tu auras:
-      # ./coverage-frontend/lcov.info
-      # ./coverage-backend/lcov.info
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
