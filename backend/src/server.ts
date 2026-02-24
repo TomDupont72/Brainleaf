@@ -2,7 +2,7 @@ import "dotenv/config"
 import Fastify from "fastify"
 import swagger from "@fastify/swagger"
 import swaggerUI from "@fastify/swagger-ui"
-import { authRoutes } from "./routes/auth"
+import { authRoutes } from "./routes/auth.js"
 import fastifyCors from "@fastify/cors"
 
 const app = Fastify({ logger: true })
