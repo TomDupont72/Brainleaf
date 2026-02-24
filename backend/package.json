@@ -1,0 +1,17 @@
+{
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@prisma/adapter-pg": "^7.4.1",
+    "@prisma/client": "^7.4.1",
+    "better-auth": "^1.4.18",
+    "pg": "^8.18.0",
+    "prisma": "^7.4.1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.16.0"
+  }
+}

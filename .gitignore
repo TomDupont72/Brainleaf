@@ -1,0 +1,32 @@
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Env
+.env
+**/.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+**/node_modules/
+
+# Builds
+dist/
+**/dist/
+build/
+**/build/
+
+# Logs
+*.log
+
+# Prisma
+**/prisma/dev.db
+**/prisma/*.db
+**/prisma/*.db-journal
+
+# Uploads / generated (si tu stockes des fichiers localement)
+uploads/
+generated/
