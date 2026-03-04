@@ -21,7 +21,7 @@ export default function PageHeader({ title, action }: PageHeaderProps) {
         <h2 className="text-xl font-semibold">{title}</h2>
       </div>
       <div className="flex flex-row items-center gap-4">
-        <p className="text-md font-semibold">Username</p>
+        <p className="text-md font-semibold">Tom</p>
         <Button variant="outline" size="icon" onClick={() => setDark(!dark)}>{dark ? <Sun/>: <Moon/>}</Button>
       </div>
       {action && (
