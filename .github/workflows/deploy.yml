@@ -44,12 +44,10 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
-      # Upload frontend (dist à la racine)
       - name: Upload frontend dist
         run: |
           rsync -az --delete dist/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/brainleaf/frontend/
 
-      # Upload backend build + prisma + package files
       - name: Upload backend artifacts
         run: |
           rsync -az --delete backend/dist/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/brainleaf/api/dist/
@@ -76,7 +74,7 @@ jobs:
       - name: Health check
         run: |
           for i in {1..30}; do
-            curl -fsS http://127.0.0.1:8000/api/health && break
+            curl -fsS https://brainleaf.tomdupont.fr/api/health && break
             sleep 1
           done
-          curl -fsS http://127.0.0.1:8000/api/health
+          curl -fsS https://brainleaf.tomdupont.fr/api/health
