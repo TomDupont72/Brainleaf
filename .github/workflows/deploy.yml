@@ -22,19 +22,16 @@ jobs:
           node-version: "20"
           cache: "npm"
 
-      # Installe à la racine (mono-repo / workspace / scripts root)
-      - name: Install deps (root)
-        run: npm ci
+      - name: Install & build frontend
+        run: |
+            npm ci
+            npm run build
 
-      # Build frontend depuis la racine
-      # (doit produire un dossier dist/ à la racine comme chez toi)
-      - name: Build frontend (root)
-        run: npm run build
-
-      # Build backend (si tu as un script root qui le fait)
-      # Sinon commente cette étape et on build dans backend/ directement
-      - name: Build backend (root)
-        run: npm run build
+      - name: Install & build backend
+        working-directory: backend
+        run: |
+            npm ci
+            npm run build
 
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.9.0
