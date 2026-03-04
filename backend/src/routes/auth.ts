@@ -6,7 +6,13 @@ export async function authRoutes(app: FastifyInstance) {
     method: ["GET", "POST", "OPTIONS"],
     url: "/*",
     handler: async (req, reply) => {
-      const url = new URL(req.url, `${req.protocol}://${req.headers.host}`)
+      const rawUrl = req.raw.url ?? req.url
+
+      const stripped = rawUrl.startsWith("/auth")
+        ? rawUrl.slice("/auth".length) || "/"
+        : rawUrl
+
+      const url = new URL(stripped, `${req.protocol}://${req.headers.host}`)
 
       const body =
         req.method === "GET" || req.method === "HEAD"

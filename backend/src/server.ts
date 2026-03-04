@@ -4,21 +4,32 @@ import swagger from "@fastify/swagger"
 import swaggerUI from "@fastify/swagger-ui"
 import { authRoutes } from "./routes/auth.js"
 import fastifyCors from "@fastify/cors"
+import { authGuard } from "./plugins/auth-guard.js"
+import rateLimit from "@fastify/rate-limit"
+import helmet from "@fastify/helmet"
 
-const app = Fastify({ logger: true })
+const app = Fastify({ logger: true, bodyLimit: 1024 * 1024, trustProxy: true }) 
 
-await app.register(swagger, {
-  openapi: {
-    info: {
-      title: "Brainleaf API",
-      version: "1.0.0",
+if (process.env.NODE_ENV != "production") {
+  await app.register(swagger, {
+    openapi: {
+      info: {
+        title: "Brainleaf API",
+        version: "1.0.0",
+      },
     },
-  },
-})
+  })
 
-await app.register(swaggerUI, {
-  routePrefix: "/docs", // Swagger UI ici
+  await app.register(swaggerUI, {
+    routePrefix: "/docs",
+  })
+}
+
+await app.register(helmet, {
+  contentSecurityPolicy: false,
+  frameguard: false,
 })
+await app.register(rateLimit, {max: 100, timeWindow: "1 minute"})
 
 app.get("/api/health", {
   schema: {
@@ -38,6 +49,10 @@ app.register(fastifyCors, {
   credentials: true,
 })
 
-app.register(authRoutes, { prefix: "/api/auth" })
+await app.register(authRoutes, { prefix: "/api/auth" })
+await app.register(authGuard)
 
-await app.listen({ port: 8000, host: "0.0.0.0" })
+await app.listen({
+  port: Number(process.env.PORT ?? 8000),
+  host: process.env.HOST ?? "127.0.0.1",
+})
