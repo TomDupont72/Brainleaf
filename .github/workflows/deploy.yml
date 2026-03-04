@@ -75,4 +75,8 @@ jobs:
 
       - name: Health check
         run: |
-          curl -fsS https://brainleaf.tomdupont.fr/api/health
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:8000/api/health && break
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8000/api/health
