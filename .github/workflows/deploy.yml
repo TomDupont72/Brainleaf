@@ -30,6 +30,7 @@ jobs:
       - name: Install & build backend
         working-directory: backend
         run: |
+            npm ci
             npm run build
 
       - name: Add SSH key
@@ -60,12 +61,10 @@ jobs:
             set -e
             cd /var/www/brainleaf/api
 
-            npm ci
+            npm ci --omit=dev
 
             # Prisma client generation (important)
             npx prisma generate
-
-            npm prund --omit=dev
 
             sudo systemctl restart brainleaf-api
             sudo systemctl reload nginx || true
