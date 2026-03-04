@@ -7,13 +7,13 @@ export async function authGuard(app: FastifyInstance) {
       return reply.status(401).send({ message: "Unauthorized" })
     }
 
-    const token = auth.slice("Bearer ".length)
+    // const token = auth.slice("Bearer ".length)
     // TODO: vérifie ton token (Better Auth / JWT / session)
     // Si OK, tu peux attacher un user à req, ex:
     // req.user = decodedUser
 
     // Pour l’instant on laisse “passer” si token présent
-    return
+    // return
   })
 }
 

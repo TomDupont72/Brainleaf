@@ -34,7 +34,7 @@ jobs:
       # Build backend (si tu as un script root qui le fait)
       # Sinon commente cette étape et on build dans backend/ directement
       - name: Build backend (root)
-        run: npm run build:api
+        run: npm run build
 
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.9.0
