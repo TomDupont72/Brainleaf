@@ -31,6 +31,7 @@ jobs:
         working-directory: backend
         run: |
             npm ci
+            npx prisma generate
             npm run build
 
       - name: Add SSH key
