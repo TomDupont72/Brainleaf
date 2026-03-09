@@ -1,92 +1,15 @@
 import { Button, Card, FieldLabel, Input } from "@/components/ui/index"
 import PageHeader from "@/components/header"
 import InputPassword from "@/components/inputPassword"
-import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { authClient } from "@/lib/auth-client"
-import { useNavigate } from "react-router-dom"
-
-type SignUpPayload = {
-    email: string,
-    password: string,
-    name: string
-}
+import { useAuth } from "@/hooks/useAuthentication"
 
 export default function Authentification() {
-    const navigate = useNavigate();
-
-    const [log, setLog] = useState<"signIn" | "register">("signIn")
-
-    const [emailSI, setEmailSI] = useState("");
-    const [passwordSI, setPasswordSI] = useState("");
-
-    const [usernameR, setUsernameR] = useState("");
-    const [emailR, setEmailR] = useState("");
-    const [passwordR, setPasswordR] = useState("");
-    const [passwordConfirmR, setPasswordConfirmR] = useState("");
-
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-    async function onSignIn(e: React.SyntheticEvent<HTMLFormElement>) {
-        e.preventDefault()
-        setError(null)
-        setLoading(true)
-
-        try {
-            const res = await authClient.signIn.email({
-                email: emailSI,
-                password: passwordSI,
-            })
-
-            if (res?.error) {
-                setError(res.error.message ?? "Impossible de se connecter.")
-                return
-            }
-
-            navigate("/dashboard");
-        } catch (error) {
-            console.error("[Authentification.onSignIn failed]", error);
-            setError("Impossible de se connecter.")
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    async function onRegister(e: React.SyntheticEvent<HTMLFormElement>) {
-        e.preventDefault()
-        setError(null)
-        setLoading(true)
-
-        if (passwordR !== passwordConfirmR) {
-        setError("Les mots de passe ne correspondent pas.")
-        return
-        }
-
-        try {
-            const res = await authClient.signUp.email({
-                email: emailR,
-                password: passwordR,
-                name: usernameR,
-            } as SignUpPayload)
-
-            if (res?.error) {
-                setError(res.error.message ?? "Impossible de se connecter.")
-                return
-            }
-
-            navigate("/dashboard");
-        } catch (error) {
-            console.error("[Authentification.onRegister failed]", error);
-            setError("Impossible de s'inscrire.")
-        } finally {
-            setLoading(false);
-        }
-    }
+    const { log, setLog, emailSI, setEmailSI, passwordSI, setPasswordSI, usernameR, setUsernameR, emailR, setEmailR, passwordR, setPasswordR, passwordConfirmR, setPasswordConfirmR, loading, error, signIn, register } = useAuth();
 
     return (
         <main className="min-h-screen flex flex-col p-3">
-            <PageHeader title="Brainleaf" />
+            <PageHeader title="Brainleaf" auth={false}/>
             <AnimatePresence mode="wait">
             { log === "signIn" ? (
             <div className="flex-1 flex flex-col justify-center items-center">
@@ -98,7 +21,7 @@ export default function Authentification() {
                 transition={{ duration: 0.25 }}
                 >
                 <Card className="min-w-80 flex justify-center items-left mb-2 p-6">
-                    <form onSubmit={onSignIn} className="flex flex-col gap-4">
+                    <form onSubmit={signIn} className="flex flex-col gap-4">
                         <h2 className="text-2xl font-semibold">Se connecter</h2>
                         <FieldLabel htmlFor="emailSI">Email</FieldLabel>
                         <Input id="emailSI" type="email" value={emailSI} onChange={(e) => setEmailSI(e.target.value)} required></Input>
@@ -125,7 +48,7 @@ export default function Authentification() {
                     transition={{ duration: 0.25 }}
                     >
                     <Card className="min-w-80 flex justify-center items-left mb-2 p-6">
-                        <form onSubmit={onRegister} className="flex flex-col gap-4">
+                        <form onSubmit={register} className="flex flex-col gap-4">
                             <h2 className="text-2xl font-semibold">S'inscrire</h2>
                             <FieldLabel htmlFor="usernameR">Nom d'utilisateur</FieldLabel>
                             <Input id="usernameR" value={usernameR} onChange={(e) => setUsernameR(e.target.value)} required></Input>
