@@ -19,7 +19,7 @@ type AppSession = {
     expiresAt?: Date;
 }
 
-export function useAuth() {
+export function useAuthentification() {
     const navigate = useNavigate();
 
     const { data: session } = authClient.useSession();
@@ -53,7 +53,7 @@ export function useAuth() {
                 return
             }
 
-            localStorage.setItem("session", JSON.stringify({user: {email: data.user.email, name: data.user.name, id: data.user.id}, token: data.token, createdAt: data.user.createdAt} as AppSession));
+            localStorage.setItem("session", JSON.stringify({user: {email: data.user.email, name: data.user.name, id: data.user.id}, createdAt: data.user.createdAt} as AppSession));
 
             navigate("/dashboard", { replace: true });
         } catch (error) {
@@ -86,7 +86,7 @@ export function useAuth() {
                 return
             }
 
-            localStorage.setItem("session", JSON.stringify({user: {email: data.user.email, name: data.user.name, id: data.user.id}, token: data.token, createdAt: data.user.createdAt} as AppSession));
+            localStorage.setItem("session", JSON.stringify({user: {email: data.user.email, name: data.user.name, id: data.user.id}, createdAt: data.user.createdAt} as AppSession));
 
             navigate("/dashboard", { replace: true });
         } catch (error) {
@@ -99,7 +99,7 @@ export function useAuth() {
 
     useEffect(() => {
         if (session) {
-            localStorage.setItem("session", JSON.stringify({user: {email: session.user.email, name: session.user.name, id: session.user.id}, token: session.session.token, expiresAt: session.session.expiresAt, createdAt: session.user.createdAt} as AppSession));
+            localStorage.setItem("session", JSON.stringify({user: {email: session.user.email, name: session.user.name, id: session.user.id}, expiresAt: session.session.expiresAt, createdAt: session.user.createdAt} as AppSession));
             navigate("/dashboard", { replace: true });
         }
     }, [session, navigate])
