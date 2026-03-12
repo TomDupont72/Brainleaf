@@ -7,6 +7,8 @@ import fastifyCors from "@fastify/cors"
 import { authGuard } from "./plugins/auth-guard.js"
 import rateLimit from "@fastify/rate-limit"
 import helmet from "@fastify/helmet"
+import multipart from "@fastify/multipart"
+import { fileRoutes } from "./routes/files.js"
 
 const app = Fastify({ logger: true, bodyLimit: 1024 * 1024, trustProxy: true }) 
 
@@ -49,10 +51,15 @@ app.register(fastifyCors, {
   credentials: true,
 })
 
+app.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } })
+
 await app.register(authRoutes, { prefix: "/api/auth" })
+
 await app.register(authGuard)
+
+await app.register(fileRoutes, { prefix: "/api/file" })
 
 await app.listen({
   port: Number(process.env.PORT ?? 8000),
-  host: process.env.HOST ?? "127.0.0.1",
+  host: process.env.HOST ?? "localhost",
 })

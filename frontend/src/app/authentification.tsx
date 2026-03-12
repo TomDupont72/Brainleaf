@@ -2,10 +2,10 @@ import { Button, Card, FieldLabel, Input } from "@/components/ui/index"
 import PageHeader from "@/components/header"
 import InputPassword from "@/components/inputPassword"
 import { motion, AnimatePresence } from "framer-motion"
-import { useAuth } from "@/hooks/useAuthentication"
+import { useAuthentification } from "@/hooks/useAuthentification"
 
 export default function Authentification() {
-    const { log, setLog, emailSI, setEmailSI, passwordSI, setPasswordSI, usernameR, setUsernameR, emailR, setEmailR, passwordR, setPasswordR, passwordConfirmR, setPasswordConfirmR, loading, error, signIn, register } = useAuth();
+    const { log, setLog, emailSI, setEmailSI, passwordSI, setPasswordSI, usernameR, setUsernameR, emailR, setEmailR, passwordR, setPasswordR, passwordConfirmR, setPasswordConfirmR, loading, error, signIn, register } = useAuthentification();
 
     return (
         <main className="min-h-screen flex flex-col p-3">
@@ -28,7 +28,7 @@ export default function Authentification() {
                         <FieldLabel htmlFor="passwordSI">Mot de passe</FieldLabel>
                         <InputPassword id="passwordSI" value={passwordSI} onChange={(e) => setPasswordSI(e.target.value)}></InputPassword>
                         {error ? <p className="text-md font-semi">{error}</p> : null}
-                        <Button type="submit" variant="outline" disabled={loading}>Se connecter</Button>
+                        <Button type="submit" disabled={loading}>Se connecter</Button>
                     </form>
                 </Card>
                 <div className="flex flex-row items-center justify-center">
@@ -59,7 +59,7 @@ export default function Authentification() {
                             <FieldLabel htmlFor="passwordConfirmR">Confirmer le mot de passe</FieldLabel>
                             <InputPassword id="passwordConfirmR" value={passwordConfirmR} onChange={(e) => setPasswordConfirmR(e.target.value)}></InputPassword>
                             {error ? <p className="text-md font-semi">{error}</p> : null}
-                            <Button type="submit" variant="outline"  disabled={loading}>S'inscrire</Button>
+                            <Button type="submit" disabled={loading}>S'inscrire</Button>
                         </form>
                     </Card>
                     <div className="flex flex-row items-center justify-center">

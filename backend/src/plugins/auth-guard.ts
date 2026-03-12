@@ -1,25 +1,34 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify"
+import fp from "fastify-plugin";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { fromNodeHeaders } from "better-auth/node";
+import { auth } from "../auth.js";
 
-export async function authGuard(app: FastifyInstance) {
+async function authGuardPlugin(app: FastifyInstance) {
   app.decorate("requireAuth", async (req: FastifyRequest, reply: FastifyReply) => {
-    const auth = req.headers.authorization
-    if (!auth?.startsWith("Bearer ")) {
-      return reply.status(401).send({ message: "Unauthorized" })
+    const session = await auth.api.getSession({
+      headers: fromNodeHeaders(req.headers),
+    });
+
+    if (!session) {
+      return reply.status(401).send({ message: "Unauthorized" });
     }
 
-    // const token = auth.slice("Bearer ".length)
-    // TODO: vérifie ton token (Better Auth / JWT / session)
-    // Si OK, tu peux attacher un user à req, ex:
-    // req.user = decodedUser
-
-    // Pour l’instant on laisse “passer” si token présent
-    // return
-  })
+    req.user = {
+      id: session.session.userId,
+    };
+  });
 }
 
-// Typage TS (optionnel)
+export const authGuard = fp(authGuardPlugin);
+
 declare module "fastify" {
   interface FastifyInstance {
-    requireAuth: (req: FastifyRequest, reply: FastifyReply) => Promise<void>
+    requireAuth: (req: FastifyRequest, reply: FastifyReply) => Promise<unknown>;
+  }
+
+  interface FastifyRequest {
+    user: {
+      id: string;
+    };
   }
 }
