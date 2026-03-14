@@ -82,6 +82,8 @@ model File {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   fileName  String
   fileKey   String   @unique
+  mime      String
+  status    String
   size      Int
   createdAt DateTime @default(now())
 }

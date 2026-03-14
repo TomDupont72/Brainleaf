@@ -6,7 +6,7 @@ import { auth } from "../auth.js";
 async function authGuardPlugin(app: FastifyInstance) {
   app.decorate("requireAuth", async (req: FastifyRequest, reply: FastifyReply) => {
     const session = await auth.api.getSession({
-      headers: fromNodeHeaders(req.headers),
+      headers: fromNodeHeaders(req.headers)
     });
 
     if (!session) {
@@ -14,7 +14,7 @@ async function authGuardPlugin(app: FastifyInstance) {
     }
 
     req.user = {
-      id: session.session.userId,
+      id: session.session.userId
     };
   });
 }

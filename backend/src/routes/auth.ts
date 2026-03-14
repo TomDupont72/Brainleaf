@@ -1,46 +1,44 @@
-import type { FastifyInstance } from "fastify"
-import { auth } from "../auth.js"
+import type { FastifyInstance } from "fastify";
+import { auth } from "../auth.js";
 
 export async function authRoutes(app: FastifyInstance) {
   app.route({
     method: ["GET", "POST", "OPTIONS"],
     url: "/*",
     handler: async (req, reply) => {
-      const rawUrl = req.raw.url ?? req.url
+      const rawUrl = req.raw.url ?? req.url;
 
-      const stripped = rawUrl.startsWith("/auth")
-        ? rawUrl.slice("/auth".length) || "/"
-        : rawUrl
+      const stripped = rawUrl.startsWith("/auth") ? rawUrl.slice("/auth".length) || "/" : rawUrl;
 
-      const url = new URL(stripped, `${req.protocol}://${req.headers.host}`)
+      const url = new URL(stripped, `${req.protocol}://${req.headers.host}`);
 
       const body =
         req.method === "GET" || req.method === "HEAD"
           ? undefined
           : req.body
-          ? JSON.stringify(req.body)
-          : undefined
+            ? JSON.stringify(req.body)
+            : undefined;
 
-      const headers = new Headers()
+      const headers = new Headers();
       for (const [k, v] of Object.entries(req.headers)) {
-        if (typeof v === "string") headers.set(k, v)
-        else if (Array.isArray(v)) headers.set(k, v.join(","))
+        if (typeof v === "string") headers.set(k, v);
+        else if (Array.isArray(v)) headers.set(k, v.join(","));
       }
-      if (body) headers.set("content-type", "application/json")
+      if (body) headers.set("content-type", "application/json");
 
       const webReq = new Request(url.toString(), {
         method: req.method,
         headers,
-        body,
-      })
+        body
+      });
 
-      const res = await auth.handler(webReq)
+      const res = await auth.handler(webReq);
 
-      reply.status(res.status)
-      res.headers.forEach((value, key) => reply.header(key, value))
+      reply.status(res.status);
+      res.headers.forEach((value, key) => reply.header(key, value));
 
-      const text = await res.text()
-      reply.send(text)
-    },
-  })
+      const text = await res.text();
+      reply.send(text);
+    }
+  });
 }

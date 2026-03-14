@@ -38,7 +38,9 @@
   --ring: oklch(0.705 0.015 286.067);
 }
 
-body { margin: 0; }
+body {
+  margin: 0;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -91,6 +93,10 @@ body { margin: 0; }
 }
 
 @layer base {
-  * { @apply border-border outline-ring/50; }
-  body { @apply bg-background text-foreground; }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

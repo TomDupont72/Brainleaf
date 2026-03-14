@@ -1,0 +1,101 @@
+import { prisma } from "../db/prisma.js";
+import {
+  PutObjectCommand,
+  ListObjectVersionsCommand,
+  ListObjectVersionsCommandOutput,
+  DeleteObjectCommand
+} from "@aws-sdk/client-s3";
+import { b2 } from "../db/b2.js";
+
+export async function insertFile(
+  userId: string,
+  fileName: string,
+  fileKey: string,
+  size: number,
+  mime: string,
+  status: "pending" | "success" | "error" | "deleted"
+) {
+  return prisma.file.create({
+    data: {
+      userId: userId,
+      fileName: fileName,
+      fileKey: fileKey,
+      size: size,
+      mime: mime,
+      status: status
+    }
+  });
+}
+
+export async function insertFileB2(key: string, buffer: Buffer, mime: string) {
+  return b2.send(
+    new PutObjectCommand({
+      Bucket: process.env.B2_BUCKET_NAME,
+      Key: key,
+      Body: buffer,
+      ContentType: mime
+    })
+  );
+}
+
+export async function updateFileStatus(
+  fileKey: string,
+  status: "pending" | "success" | "error" | "deleted"
+) {
+  return prisma.file.update({
+    where: { fileKey },
+    data: { status }
+  });
+}
+
+export async function getFiles(userId: string) {
+  return prisma.file.findMany({
+    where: { userId },
+    select: {
+      id: true,
+      fileName: true,
+      fileKey: true,
+      size: true,
+      createdAt: true,
+      mime: true,
+      status: true
+    },
+    orderBy: { createdAt: "desc" },
+    take: 20
+  });
+}
+
+export async function getFile(userId: string, fileKey: string) {
+  return prisma.file.findFirst({
+    where: { userId, fileKey }
+  });
+}
+
+export async function getFileB2(fileKey: string) {
+  return b2.send(
+    new ListObjectVersionsCommand({
+      Bucket: process.env.B2_BUCKET_NAME,
+      Prefix: fileKey
+    })
+  );
+}
+
+export async function deleteFileB2(versions: ListObjectVersionsCommandOutput, fileKey: string) {
+  for (const v of versions.Versions ?? []) {
+    if (v.Key !== fileKey) continue;
+
+    await b2.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.B2_BUCKET_NAME,
+        Key: v.Key,
+        VersionId: v.VersionId
+      })
+    );
+  }
+}
+
+export async function deleteFile(id: number) {
+  return prisma.file.delete({
+    where: { id: id }
+  });
+}
