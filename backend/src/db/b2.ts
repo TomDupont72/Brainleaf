@@ -5,6 +5,6 @@ export const b2 = new S3Client({
   endpoint: "https://s3.eu-central-003.backblazeb2.com",
   credentials: {
     accessKeyId: process.env.B2_KEY_ID!,
-    secretAccessKey: process.env.B2_APPLICATION_KEY!,
-  },
+    secretAccessKey: process.env.B2_APPLICATION_KEY!
+  }
 });

@@ -3,34 +3,34 @@
 BrainLeaf is an AI-powered SaaS that transforms PRD (Product Requirement
 Documents) into structured learning materials:
 
--   📄 Smart summaries\
--   🧠 Revision sheets\
--   ❓ Auto-generated quizzes
+- 📄 Smart summaries\
+- 🧠 Revision sheets\
+- ❓ Auto-generated quizzes
 
 Built with a modern fullstack architecture using React (Vite), Fastify,
 and Prisma.
 
-------------------------------------------------------------------------
+---
 
 # 🏗 Tech Stack
 
 ## Frontend
 
--   React
--   Vite
--   TypeScript
+- React
+- Vite
+- TypeScript
 
 ## Backend
 
--   Fastify
--   Prisma ORM
--   PostgreSQL (recommended) or SQLite (dev)
+- Fastify
+- Prisma ORM
+- PostgreSQL (recommended) or SQLite (dev)
 
 ## AI Integration
 
--   OpenAI API (or compatible LLM provider)
+- OpenAI API (or compatible LLM provider)
 
-------------------------------------------------------------------------
+---
 
 # 📁 Project Structure
 
@@ -39,7 +39,7 @@ migrations/ │ ├── src/ │ ├── package.json │ └── .env.exa
 frontend/ │ ├── src/ │ ├── package.json │ └── .env.example │ └──
 README.md
 
-------------------------------------------------------------------------
+---
 
 # 🚀 Getting Started
 
@@ -47,7 +47,7 @@ README.md
 
 git clone https://github.com/your-username/brainleaf.git cd brainleaf
 
-------------------------------------------------------------------------
+---
 
 # ⚙️ Backend Setup
 
@@ -71,7 +71,7 @@ npm run dev
 
 Backend runs on: http://localhost:3000
 
-------------------------------------------------------------------------
+---
 
 # 💻 Frontend Setup
 
@@ -91,37 +91,41 @@ npm run dev
 
 Frontend runs on: http://localhost:5173
 
-------------------------------------------------------------------------
+---
 
 # 🧠 Features
 
--   PRD file upload
--   AI-generated summaries
--   Revision sheet generation
--   Quiz generation
--   Structured content output
--   Modular backend architecture
--   Clean React UI with Vite
+- PRD file upload
+- AI-generated summaries
+- Revision sheet generation
+- Quiz generation
+- Structured content output
+- Modular backend architecture
+- Clean React UI with Vite
 
-------------------------------------------------------------------------
+---
 
 # 🔐 Environment Variables
 
 ## Backend
 
-  Variable         Description
-  ---------------- -------------------------------
-  DATABASE_URL     Database connection string
-  OPENAI_API_KEY   AI provider API key
-  JWT_SECRET       Secret key for authentication
+Variable Description
+
+---
+
+DATABASE_URL Database connection string
+OPENAI_API_KEY AI provider API key
+JWT_SECRET Secret key for authentication
 
 ## Frontend
 
-  Variable       Description
-  -------------- -----------------
-  VITE_API_URL   Backend API URL
+Variable Description
 
-------------------------------------------------------------------------
+---
+
+VITE_API_URL Backend API URL
+
+---
 
 # 📦 Production Build
 
@@ -135,28 +139,28 @@ npm run build
 
 Deploy the generated dist/ folder.
 
-------------------------------------------------------------------------
+---
 
 # 🛡 Security Notes
 
--   `.env` files are ignored by Git
--   Never commit API keys
--   Use strong JWT secrets
--   Enable HTTPS in production
--   Use a managed database in production
+- `.env` files are ignored by Git
+- Never commit API keys
+- Use strong JWT secrets
+- Enable HTTPS in production
+- Use a managed database in production
 
-------------------------------------------------------------------------
+---
 
 # 📌 Roadmap
 
--   [ ] Authentication system
--   [ ] File storage (S3 / cloud storage)
--   [ ] Stripe subscription integration
--   [ ] Dashboard analytics
--   [ ] Multi-document workspace
--   [ ] Role-based access control
+- [ ] Authentication system
+- [ ] File storage (S3 / cloud storage)
+- [ ] Stripe subscription integration
+- [ ] Dashboard analytics
+- [ ] Multi-document workspace
+- [ ] Role-based access control
 
-------------------------------------------------------------------------
+---
 
 # 📄 License
 

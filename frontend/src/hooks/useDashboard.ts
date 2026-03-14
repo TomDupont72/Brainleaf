@@ -1,76 +1,62 @@
+import { apiFileDelete, apiFileFiles, apiFileUpload } from "@/api/files";
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 type FileData = {
-    id: number;
-    fileName: string;
-    fileKey: string;
-    size: number;
-    createdAt: Date;
-}
+  id: number;
+  fileName: string;
+  fileKey: string;
+  size: number;
+  createdAt: string;
+};
 
 export function useDashboard() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const apiUrl = import.meta.env.VITE_API_URL;
+  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<FileData[]>([]);
+  const [fileName, setFileName] = useState("");
 
-    const [file, setFile] = useState<File | null>(null);
-    const [files, setFiles] = useState<FileData[]>([]);
-    const [fileName, setFileName] = useState("");
+  async function uploadFile(file: File) {
+    const formData = new FormData();
+    formData.append("file", file, fileName);
 
-    async function uploadFile(file: File, e: React.MouseEvent) {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append("file", file, fileName);
+    const data = await apiFileUpload(formData);
 
-        const res = await fetch(`${apiUrl}/api/file/upload`, {
-            method: "POST",
-            body: formData,
-            credentials: "include"
-        });
+    setFile(null);
+    setFileName("");
 
-        const data = await res.json();
-        
-        setFile(null);
-        setFileName("");
+    navigate(`/file/${data.file.fileKey}`);
+  }
 
-        navigate(`/file/${data.file.fileKey}`);
-    }
+  const getFiles = useCallback(async () => {
+    return apiFileFiles();
+  }, []);
 
-    const getFiles = useCallback(async () => {
-        const res = await fetch(`${apiUrl}/api/file/files`, {
-            method: "GET",
-            credentials: "include"
-        });
+  const deleteFile = async (fileKey: string) => {
+    await apiFileDelete(fileKey);
 
-        return res.json();
-    }, [apiUrl]);
+    setFiles((prev) => prev.filter((f) => f.fileKey !== fileKey));
+  };
 
-    const deleteFile = async (fileKey: string) => {
-        const res = await fetch(`${apiUrl}/api/file/delete/${fileKey}`, {
-            method: "POST",
-            credentials: "include"
-        });
+  const navigateToFile = (fileKey: string) => {
+    navigate(`/file/${fileKey}`);
+  };
 
-        const result = await res.json();
-        setFiles(files.filter((f) => f.fileKey !== fileKey));
-        return result;
-    };
+  useEffect(() => {
+    (async () => {
+      const filesData = await getFiles();
+      setFiles(filesData.files);
+    })();
+  }, [getFiles]);
 
-    useEffect(() => {(
-        async () => {
-            const filesData = await getFiles();
-            setFiles(filesData.files);
-        })();
-    }, [getFiles]);
-
-    return {
-        uploadFile,
-        file,
-        setFile,
-        files,
-        setFileName,
-        deleteFile,
-        navigate
-    }
+  return {
+    uploadFile,
+    file,
+    setFile,
+    files,
+    setFileName,
+    deleteFile,
+    navigateToFile
+  };
 }

@@ -1,7 +1,7 @@
-import { Routes, Route, Navigate } from "react-router-dom"
-import Authentification from "./src/app/authentification"
-import Dashboard from "./src/app/dashboard"
-import File from "./src/app/file"
+import { Routes, Route, Navigate } from "react-router-dom";
+import Authentification from "./src/app/authentification";
+import Dashboard from "./src/app/dashboard";
+import File from "./src/app/file";
 
 export default function App() {
   return (
@@ -11,5 +11,5 @@ export default function App() {
       <Route path="*" element={<Navigate to="/auth" />} />
       <Route path="/file/:fileKey" element={<File />} />
     </Routes>
-  )
+  );
 }

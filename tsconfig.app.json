@@ -9,9 +9,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "frontend/src/*"
-      ]
+      "@/*": ["frontend/src/*"]
     },
 
     /* Bundler mode */
