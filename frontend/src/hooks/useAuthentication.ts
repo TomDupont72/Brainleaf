@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "react-router-dom";
-
-type SignUpPayload = {
-  email: string;
-  password: string;
-  name: string;
-};
+import { apiSignIn, apiSignUp } from "@/api/auth";
 
 type AppSession = {
   user: {
@@ -19,7 +14,7 @@ type AppSession = {
   expiresAt?: Date;
 };
 
-export function useAuthentification() {
+export function useAuthentication() {
   const navigate = useNavigate();
 
   const { data: session } = authClient.useSession();
@@ -43,15 +38,7 @@ export function useAuthentification() {
     setLoading(true);
 
     try {
-      const { data, error } = await authClient.signIn.email({
-        email: emailSI,
-        password: passwordSI
-      });
-
-      if (error) {
-        setError(error.message ?? "Impossible de se connecter.");
-        return;
-      }
+      const data = await apiSignIn(emailSI, passwordSI);
 
       localStorage.setItem(
         "session",
@@ -63,7 +50,7 @@ export function useAuthentification() {
 
       navigate("/dashboard", { replace: true });
     } catch (error) {
-      console.error("[Authentification.onSignIn failed]", error);
+      console.error("[useAuthentication.onSignIn failed]", error);
       setError("Impossible de se connecter.");
     } finally {
       setLoading(false);
@@ -81,16 +68,7 @@ export function useAuthentification() {
     }
 
     try {
-      const { data, error } = await authClient.signUp.email({
-        email: emailR,
-        password: passwordR,
-        name: usernameR
-      } as SignUpPayload);
-
-      if (error) {
-        setError(error.message ?? "Impossible de s'inscrire.");
-        return;
-      }
+      const data = await apiSignUp(emailR, passwordR, usernameR);
 
       localStorage.setItem(
         "session",
@@ -102,7 +80,7 @@ export function useAuthentification() {
 
       navigate("/dashboard", { replace: true });
     } catch (error) {
-      console.error("[Authentification.onRegister failed]", error);
+      console.error("[useAuthentication.onRegister failed]", error);
       setError("Impossible de s'inscrire.");
     } finally {
       setLoading(false);
@@ -140,6 +118,7 @@ export function useAuthentification() {
     setPasswordConfirmR,
     loading,
     error,
+    setError,
     signIn,
     register
   };

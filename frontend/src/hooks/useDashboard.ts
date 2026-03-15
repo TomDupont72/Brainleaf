@@ -16,27 +16,61 @@ export function useDashboard() {
   const [file, setFile] = useState<File | null>(null);
   const [files, setFiles] = useState<FileData[]>([]);
   const [fileName, setFileName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function uploadFile(file: File) {
-    const formData = new FormData();
-    formData.append("file", file, fileName);
+    setError(null);
+    setLoading(true);
 
-    const data = await apiFileUpload(formData);
+    try {
+      const formData = new FormData();
+      formData.append("file", file, fileName);
 
-    setFile(null);
-    setFileName("");
+      const data = await apiFileUpload(formData);
 
-    navigate(`/file/${data.file.fileKey}`);
+      setFile(null);
+      setFileName("");
+
+      navigate(`/file/${data.file.fileKey}`);
+    } catch (error) {
+      console.error("[useDashboard.uploadFile] failed", error);
+      setError("L'upload a échoué.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   const getFiles = useCallback(async () => {
-    return apiFileFiles();
+    setError(null);
+    setLoading(true);
+
+    try {
+      const data = await apiFileFiles();
+
+      return data;
+    } catch (error) {
+      console.error("[useDashboard.getFiles] failed", error);
+      setError("Impossible de récupérer les fichiers.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const deleteFile = async (fileKey: string) => {
-    await apiFileDelete(fileKey);
+    setError(null);
+    setLoading(true);
 
-    setFiles((prev) => prev.filter((f) => f.fileKey !== fileKey));
+    try {
+      await apiFileDelete(fileKey);
+
+      setFiles((prev) => prev.filter((f) => f.fileKey !== fileKey));
+    } catch (error) {
+      console.error("[useDashboard.deleteFile] failed", error);
+      setError("Impossible de supprimer le fichier.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const navigateToFile = (fileKey: string) => {
@@ -57,6 +91,9 @@ export function useDashboard() {
     files,
     setFileName,
     deleteFile,
-    navigateToFile
+    navigateToFile,
+    loading,
+    error,
+    setError
   };
 }

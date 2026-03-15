@@ -2,9 +2,10 @@ import { Button, Card, FieldLabel, Input } from "@/components/ui/index";
 import PageHeader from "@/components/header";
 import InputPassword from "@/components/inputPassword";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuthentification } from "@/hooks/useAuthentification";
+import { useAuthentication } from "@/hooks/useAuthentication";
+import ErrorAlert from "@/components/errorAlert";
 
-export default function Authentification() {
+export default function Authentication() {
   const {
     log,
     setLog,
@@ -22,9 +23,10 @@ export default function Authentification() {
     setPasswordConfirmR,
     loading,
     error,
+    setError,
     signIn,
     register
-  } = useAuthentification();
+  } = useAuthentication();
 
   return (
     <main className="min-h-screen flex flex-col p-3">
@@ -56,7 +58,6 @@ export default function Authentification() {
                     value={passwordSI}
                     onChange={(e) => setPasswordSI(e.target.value)}
                   ></InputPassword>
-                  {error ? <p className="text-md font-semi">{error}</p> : null}
                   <Button type="submit" disabled={loading}>
                     Se connecter
                   </Button>
@@ -109,7 +110,6 @@ export default function Authentification() {
                     value={passwordConfirmR}
                     onChange={(e) => setPasswordConfirmR(e.target.value)}
                   ></InputPassword>
-                  {error ? <p className="text-md font-semi">{error}</p> : null}
                   <Button type="submit" disabled={loading}>
                     S'inscrire
                   </Button>
@@ -125,6 +125,11 @@ export default function Authentification() {
           </div>
         )}
       </AnimatePresence>
+      <ErrorAlert
+        error={error}
+        className="absolute bottom-8 left-8"
+        setErrorToNull={() => setError(null)}
+      />
     </main>
   );
 }

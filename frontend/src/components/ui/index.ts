@@ -17,3 +17,5 @@ export {
   DialogHeader,
   DialogFooter
 } from "@/components/ui/dialog";
+export { Spinner } from "@/components/ui/spinner";
+export { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
