@@ -34,7 +34,7 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <main className="min-h-screen flex flex-col p-3">
+      <main className="h-dvh flex flex-col px-3 gap-3">
         <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />
         <div className="flex-1 flex justify-center items-center">
           <Spinner className="size-8" />
@@ -44,7 +44,7 @@ export default function Dashboard() {
   }
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden px-3 gap-3">
+    <main className="h-dvh flex flex-col px-3 gap-3">
       <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />
       {files.length > 0 ? (
         <div className="flex-1 overflow-y-auto min-h-0">
