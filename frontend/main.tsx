@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 
-const BUILD = "1.2.1";
+export const BUILD = "1.2.2";
 
 const stored = localStorage.getItem("brainleaf_build");
 
