@@ -44,54 +44,56 @@ export default function Dashboard() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col p-3">
+    <main className="h-screen flex flex-col overflow-hidden px-3 gap-3">
       <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />
       {files.length > 0 ? (
-        <div className="grid grid-cols-5 gap-8 my-5 px-8">
-          {files.map((file) => (
-            <motion.div key={file.id} initial={{ scale: 1 }} whileHover={{ scale: 1.05 }}>
-              <Card className="relative">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-3 right-3 w-8 h-8"
-                    >
-                      <Trash2 />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Supprimer le document</DialogTitle>
-                    </DialogHeader>
-                    <p className="text-md text-muted-foreground">
-                      Êtes-vous sûr de vouloir supprimer ce document ? Cette action est
-                      irréversible.
-                    </p>
-                    <div className="flex flex-row justify-end mt-4 gap-2">
-                      <DialogClose asChild>
-                        <Button variant="outline">Annuler</Button>
-                      </DialogClose>
-                      <Button variant="destructive" onClick={() => deleteFile(file.fileKey)}>
-                        Supprimer
+        <div className="flex-1 overflow-y-auto min-h-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-row-4 gap-8 my-5 px-8">
+            {files.map((file) => (
+              <motion.div key={file.id} initial={{ scale: 1 }} whileHover={{ scale: 1.05 }}>
+                <Card className="relative">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-3 right-3 w-8 h-8"
+                      >
+                        <Trash2 />
                       </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Supprimer le document</DialogTitle>
+                      </DialogHeader>
+                      <p className="text-md text-muted-foreground">
+                        Êtes-vous sûr de vouloir supprimer ce document ? Cette action est
+                        irréversible.
+                      </p>
+                      <div className="flex flex-row justify-end mt-4 gap-2">
+                        <DialogClose asChild>
+                          <Button variant="outline">Annuler</Button>
+                        </DialogClose>
+                        <Button variant="destructive" onClick={() => deleteFile(file.fileKey)}>
+                          Supprimer
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                  <div className="flex flex-col items-center justify-center gap-4 px-14">
+                    <div className="flex flex-col justify-center h-[calc(2*1lh)]">
+                      <h3 key={file.id} className="text-md font-semibold text-center line-clamp-2">
+                        {file.fileName}
+                      </h3>
                     </div>
-                  </DialogContent>
-                </Dialog>
-                <div className="flex flex-col items-center justify-center gap-4 px-14">
-                  <div className="flex flex-col justify-center h-[calc(2*1lh)]">
-                    <h3 key={file.id} className="text-md font-semibold text-center line-clamp-2">
-                      {file.fileName}
-                    </h3>
+                    <Button variant="outline" onClick={() => navigateToFile(file.fileKey)}>
+                      Apprendre
+                    </Button>
                   </div>
-                  <Button variant="outline" onClick={() => navigateToFile(file.fileKey)}>
-                    Apprendre
-                  </Button>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
+                </Card>
+              </motion.div>
+            ))}
+          </div>
           <UploadDialog
             file={file}
             setFile={setFile}
@@ -100,7 +102,7 @@ export default function Dashboard() {
             title={<Upload className="size-lg" />}
             variant="outline"
             size="icon"
-            className="absolute right-8 bottom-8 w-12 h-12 rounded-full"
+            className="fixed right-8 bottom-8 z-50 w-12 h-12 rounded-full backdrop-blur-md"
           />
         </div>
       ) : (

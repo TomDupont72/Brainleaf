@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 
-const BUILD = "1.0.1"; // tu peux changer à chaque déploiement
+const BUILD = "1.2.1";
 
 const stored = localStorage.getItem("brainleaf_build");
 
