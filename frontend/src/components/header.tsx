@@ -20,12 +20,14 @@ type PageHeaderProps = {
 export default function PageHeader({ title, action, username, onLogout, auth }: PageHeaderProps) {
   const [dark, setDark] = useState(true);
 
+  const version = "1.2.1";
+
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
 
   return (
-    <Card className="min-w-full flex flex-row justify-between items-center p-3">
+    <Card className="sticky top-4 z-50 min-w-full flex flex-row justify-between items-center p-3">
       <div className="flex flex-row items-center gap-2">
         <BrainCircuit />
         <h2 className="text-xl font-semibold">{title}</h2>
@@ -40,6 +42,9 @@ export default function PageHeader({ title, action, username, onLogout, auth }: 
               <DropdownMenuItem>Profil</DropdownMenuItem>
               <DropdownMenuItem>Paramètres</DropdownMenuItem>
               <DropdownMenuItem onClick={onLogout}>Déconnexion</DropdownMenuItem>
+              <DropdownMenuItem className="text-md text-muted-foreground text-sm">
+                v{version}
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : null}
