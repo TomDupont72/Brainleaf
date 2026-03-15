@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { apiFileFilesByKey } from "../api/files";
 
 type FileData = {
   id: number;
@@ -9,22 +10,25 @@ type FileData = {
 };
 
 export function useFile(fileKey: string) {
-  const apiUrl = import.meta.env.VITE_API_URL;
-
   const [file, setFile] = useState<FileData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const getCurrentFile = useCallback(
-    async (fileKey: string) => {
-      const res = await fetch(`${apiUrl}/api/file/files/${fileKey}`, {
-        method: "GET",
-        credentials: "include"
-      });
+  const getCurrentFile = useCallback(async (fileKey: string) => {
+    setError(null);
+    setLoading(true);
 
-      const data = await res.json();
+    try {
+      const data = await apiFileFilesByKey(fileKey);
+
       setFile(data.file);
-    },
-    [apiUrl]
-  );
+    } catch (error) {
+      console.error("[useFile.getCurrentFile] failed", error);
+      setError("Impossible de récupérer le fichier.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -34,6 +38,8 @@ export function useFile(fileKey: string) {
 
   return {
     file,
-    getCurrentFile
+    loading,
+    error,
+    setError
   };
 }

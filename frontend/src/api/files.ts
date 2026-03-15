@@ -37,3 +37,16 @@ export async function apiFileDelete(fileKey: string) {
     throw new Error("Failed to delete file");
   }
 }
+
+export async function apiFileFilesByKey(fileKey: string) {
+  const res = await fetch(`${apiUrl}/api/file/files/${fileKey}`, {
+    method: "GET",
+    credentials: "include"
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch file");
+  }
+
+  return res.json();
+}

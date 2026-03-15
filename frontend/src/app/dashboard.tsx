@@ -8,17 +8,40 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
+  Spinner
 } from "@/components/ui";
 import { useDashboard } from "@/hooks/useDashboard";
 import { usePageHeader } from "@/hooks/usePageHeader";
 import { Trash2, Upload } from "lucide-react";
 import { motion } from "framer-motion";
+import ErrorAlert from "@/components/errorAlert";
 
 export default function Dashboard() {
-  const { uploadFile, file, setFile, files, setFileName, deleteFile, navigateToFile } =
-    useDashboard();
+  const {
+    uploadFile,
+    file,
+    setFile,
+    files,
+    setFileName,
+    deleteFile,
+    navigateToFile,
+    loading,
+    error,
+    setError
+  } = useDashboard();
   const { username, logout } = usePageHeader();
+
+  if (loading) {
+    return (
+      <main className="min-h-screen flex flex-col p-3">
+        <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />
+        <div className="flex-1 flex justify-center items-center">
+          <Spinner className="size-8" />
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen flex flex-col p-3">
@@ -98,6 +121,11 @@ export default function Dashboard() {
           </Card>
         </div>
       )}
+      <ErrorAlert
+        error={error}
+        className="absolute bottom-8 left-8"
+        setErrorToNull={() => setError(null)}
+      />
     </main>
   );
 }
