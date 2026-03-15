@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/index";
 import { useEffect, useState } from "react";
 import { Sun, Moon, BrainCircuit } from "lucide-react";
-import { BUILD } from "../../main"
 
 type PageHeaderProps = {
   title: string;
@@ -20,6 +19,8 @@ type PageHeaderProps = {
 
 export default function PageHeader({ title, action, username, onLogout, auth }: PageHeaderProps) {
   const [dark, setDark] = useState(true);
+
+  const version = "1.2.1";
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -42,7 +43,7 @@ export default function PageHeader({ title, action, username, onLogout, auth }: 
               <DropdownMenuItem>Paramètres</DropdownMenuItem>
               <DropdownMenuItem onClick={onLogout}>Déconnexion</DropdownMenuItem>
               <DropdownMenuItem className="text-md text-muted-foreground text-sm">
-                v{BUILD}
+                v{version}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
