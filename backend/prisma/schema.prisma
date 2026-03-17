@@ -77,13 +77,33 @@ model Verification {
 }
 
 model File {
-  id        Int      @id @default(autoincrement())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  fileName  String
-  fileKey   String   @unique
-  mime      String
-  status    String
-  size      Int
-  createdAt DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileName      String
+  fileKey       String
+  mime          String
+  status        String
+  size          Int
+  createdAt     DateTime @default(now())
+  fileContents  FileContent[]
+  fileQuestions FileQuestion[]
+
+  @@unique([fileKey])
+}
+
+model FileContent {
+  id            Int    @id @default(autoincrement())
+  fileId        Int
+  file          File   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  summary       String
+  revisionSheet String
+}
+
+model FileQuestion {
+  id       Int    @id @default(autoincrement())
+  fileId   Int
+  file     File   @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  question String 
+  answer   String
 }

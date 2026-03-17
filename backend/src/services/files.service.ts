@@ -9,7 +9,9 @@ import {
   deleteFileB2,
   deleteFile,
   getFile,
-  getFileB2
+  getFileB2,
+  getFileContent,
+  getFileQuestions
 } from "../db/files.db.js";
 
 export async function uploadUserFile(userId: string, data: MultipartFile, request: FastifyRequest) {
@@ -68,4 +70,17 @@ export async function deleteUserFile(userId: string, fileKey: string, request: F
     }
     throw error;
   }
+}
+
+export async function getUserFile(userId: string, fileKey: string) {
+  const fileMetadata = await getFile(userId, fileKey);
+
+  if (!fileMetadata) {
+    throw new ApiError("Fichier non trouvé", "404");
+  }
+
+  const fileContent = await getFileContent(fileMetadata.id);
+  const fileQuestions = await getFileQuestions(fileMetadata.id);
+
+  return { fileMetadata, fileContent, fileQuestions };
 }

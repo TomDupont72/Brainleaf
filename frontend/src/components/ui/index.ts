@@ -1,5 +1,12 @@
 export { Button } from "@/components/ui/button";
-export { Card, CardFooter, CardHeader, CardContent } from "@/components/ui/card";
+export {
+  Card,
+  CardFooter,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription
+} from "@/components/ui/card";
 export { Input } from "@/components/ui/input";
 export { FieldLabel } from "@/components/ui/field";
 export {
@@ -19,3 +26,9 @@ export {
 } from "@/components/ui/dialog";
 export { Spinner } from "@/components/ui/spinner";
 export { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent
+} from "@/components/ui/accordion";

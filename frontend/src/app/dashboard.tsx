@@ -34,8 +34,10 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <main className="h-dvh flex flex-col px-3 gap-3">
-        <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />
+      <main className="h-screen flex flex-col">
+        <div className="px-3 pt-3">
+          <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />
+        </div>
         <div className="flex-1 flex justify-center items-center">
           <Spinner className="size-8" />
         </div>
@@ -44,11 +46,13 @@ export default function Dashboard() {
   }
 
   return (
-    <main className="h-dvh flex flex-col px-3 gap-3">
-      <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />
+    <main className="h-screen flex flex-col">
+      <div className="px-3 pt-3">
+        <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />
+      </div>
       {files.length > 0 ? (
         <div className="flex-1 overflow-y-auto min-h-0">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-row-4 gap-8 my-5 px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-row-4 gap-5 my-5 px-8">
             {files.map((file) => (
               <motion.div key={file.id} initial={{ scale: 1 }} whileHover={{ scale: 1.05 }}>
                 <Card className="relative">

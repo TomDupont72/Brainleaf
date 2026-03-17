@@ -1,12 +1,32 @@
 import { useState, useCallback, useEffect } from "react";
 import { apiFileFilesByKey } from "../api/files";
 
-type FileData = {
+type FileMetadataData = {
   id: number;
   fileName: string;
   fileKey: string;
   size: number;
   createdAt: Date;
+};
+
+type FileContentData = {
+  id: number;
+  fileId: number;
+  summary: string;
+  revisionSheet: string;
+};
+
+type FileQuestionData = {
+  id: number;
+  fileId: number;
+  question: string;
+  answer: string;
+};
+
+type FileData = {
+  fileMetadata: FileMetadataData;
+  fileContent: FileContentData;
+  fileQuestions: FileQuestionData[];
 };
 
 export function useFile(fileKey: string) {
