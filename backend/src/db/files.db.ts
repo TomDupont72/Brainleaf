@@ -99,3 +99,15 @@ export async function deleteFile(id: number) {
     where: { id: id }
   });
 }
+
+export function getFileContent(fileId: number) {
+  return prisma.fileContent.findFirst({
+    where: { fileId: fileId }
+  });
+}
+
+export function getFileQuestions(fileId: number) {
+  return prisma.fileQuestion.findMany({
+    where: { fileId: fileId }
+  });
+}

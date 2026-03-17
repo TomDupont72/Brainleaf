@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "react-router-dom";
 
@@ -6,8 +5,7 @@ export function usePageHeader() {
   const navigate = useNavigate();
 
   const session = JSON.parse(localStorage.getItem("session") || "null");
-
-  const [username, setUsername] = useState("");
+  const username = session?.user?.name ?? "";
 
   async function logout() {
     try {
@@ -21,12 +19,15 @@ export function usePageHeader() {
     }
   }
 
-  useEffect(() => {
-    setUsername(session.user.name);
-  }, [session]);
+  const navigateToDashboard = () => {
+    if (session) {
+      navigate("/dashboard");
+    }
+  };
 
   return {
     username,
-    logout
+    logout,
+    navigateToDashboard
   };
 }

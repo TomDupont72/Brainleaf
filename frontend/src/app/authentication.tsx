@@ -29,8 +29,10 @@ export default function Authentication() {
   } = useAuthentication();
 
   return (
-    <main className="min-h-screen flex flex-col p-3">
-      <PageHeader title="Brainleaf" auth={false} />
+    <main className="h-screen flex flex-col">
+      <div className="px-3 pt-3">
+        <PageHeader title="Brainleaf" auth={false} />
+      </div>
       <AnimatePresence mode="wait">
         {log === "signIn" ? (
           <div className="flex-1 flex flex-col justify-center items-center">

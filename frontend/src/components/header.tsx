@@ -9,6 +9,9 @@ import {
 import { useEffect, useState } from "react";
 import { Sun, Moon, BrainCircuit } from "lucide-react";
 
+import { BUILD } from "../../main";
+import { usePageHeader } from "@/hooks/usePageHeader";
+
 type PageHeaderProps = {
   title: string;
   action?: React.ReactNode;
@@ -20,7 +23,7 @@ type PageHeaderProps = {
 export default function PageHeader({ title, action, username, onLogout, auth }: PageHeaderProps) {
   const [dark, setDark] = useState(true);
 
-  const version = "1.2.1";
+  const { navigateToDashboard } = usePageHeader();
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -30,7 +33,13 @@ export default function PageHeader({ title, action, username, onLogout, auth }: 
     <Card className="sticky top-4 z-50 min-w-full flex flex-row justify-between items-center p-3">
       <div className="flex flex-row items-center gap-2">
         <BrainCircuit />
-        <h2 className="text-xl font-semibold">{title}</h2>
+        <Button
+          variant="link"
+          className="text-xl font-semibold -ml-4"
+          onClick={navigateToDashboard}
+        >
+          {title}
+        </Button>
       </div>
       <div className="flex flex-row items-center gap-2">
         {auth ? (
@@ -43,7 +52,7 @@ export default function PageHeader({ title, action, username, onLogout, auth }: 
               <DropdownMenuItem>Paramètres</DropdownMenuItem>
               <DropdownMenuItem onClick={onLogout}>Déconnexion</DropdownMenuItem>
               <DropdownMenuItem className="text-md text-muted-foreground text-sm">
-                v{version}
+                v{BUILD}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

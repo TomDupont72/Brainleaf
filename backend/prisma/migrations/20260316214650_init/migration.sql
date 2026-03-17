@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "File" ALTER COLUMN "mime" DROP DEFAULT,
+ALTER COLUMN "status" DROP DEFAULT;

@@ -1,7 +1,7 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { ApiError } from "../services/ApiError.js";
-import { uploadUserFile, deleteUserFile } from "../services/files.service.js";
-import { getFile, getFiles } from "../db/files.db.js";
+import { uploadUserFile, deleteUserFile, getUserFile } from "../services/files.service.js";
+import { getFiles } from "../db/files.db.js";
 
 export async function fileRoutes(fastify: FastifyInstance) {
   fastify.post("/upload", { preHandler: [fastify.requireAuth] }, async (request, reply) => {
@@ -46,9 +46,7 @@ export async function fileRoutes(fastify: FastifyInstance) {
       const { fileKey } = request.params as { fileKey: string };
       const userId = request.user.id;
 
-      const file = await getFile(userId, fileKey);
-
-      if (!file) throw new ApiError("File not found", "404");
+      const file = await getUserFile(userId, fileKey);
 
       return reply.send({ file });
     }
