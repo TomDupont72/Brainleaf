@@ -34,6 +34,7 @@ export default function Dashboard() {
 
   if (loading) {
     return (
+
       <main className="h-screen flex flex-col">
         <div className="px-3 pt-3">
           <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />

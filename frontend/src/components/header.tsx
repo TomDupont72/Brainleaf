@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/index";
 import { useEffect, useState } from "react";
 import { Sun, Moon, BrainCircuit } from "lucide-react";
+
 import { BUILD } from "../../main";
 import { usePageHeader } from "@/hooks/usePageHeader";
 
@@ -51,7 +52,7 @@ export default function PageHeader({ title, action, username, onLogout, auth }: 
               <DropdownMenuItem>Paramètres</DropdownMenuItem>
               <DropdownMenuItem onClick={onLogout}>Déconnexion</DropdownMenuItem>
               <DropdownMenuItem className="text-md text-muted-foreground text-sm">
-                v{BUILD}
+                v{version}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
