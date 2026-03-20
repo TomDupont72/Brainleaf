@@ -36,8 +36,6 @@ export function useDashboard() {
     } catch (error) {
       console.error("[useDashboard.uploadFile] failed", error);
       setError("L'upload a échoué.");
-    } finally {
-      setLoading(false);
     }
   }
 

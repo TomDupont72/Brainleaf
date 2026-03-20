@@ -11,7 +11,11 @@ import {
   getFile,
   getFileB2,
   getFileContent,
-  getFileQuestions
+  getFileQuestions,
+  createNewProcessPdfJob,
+  insertFileContent,
+  insertFileQuestions,
+  FileQuestion
 } from "../db/files.db.js";
 
 export async function uploadUserFile(userId: string, data: MultipartFile, request: FastifyRequest) {
@@ -21,11 +25,21 @@ export async function uploadUserFile(userId: string, data: MultipartFile, reques
   let fileCreated = false;
 
   try {
-    await insertFile(userId, data.filename, key, buffer.length, data.mimetype, "pending");
+    const file = await insertFile(
+      userId,
+      data.filename,
+      key,
+      buffer.length,
+      data.mimetype,
+      "pending"
+    );
     fileCreated = true;
 
     await insertFileB2(key, buffer, data.mimetype);
-    return updateFileStatus(key, "success");
+
+    await createNewProcessPdfJob(file.id, key);
+
+    return updateFileStatus(key, "processing");
   } catch (error) {
     if (fileCreated) {
       try {
@@ -83,4 +97,32 @@ export async function getUserFile(userId: string, fileKey: string) {
   const fileQuestions = await getFileQuestions(fileMetadata.id);
 
   return { fileMetadata, fileContent, fileQuestions };
+}
+
+export async function insertWorkerResult(
+  fileId: number,
+  fileKey: string,
+  summary: string,
+  revisionSheet: string,
+  questions: FileQuestion[],
+  request: FastifyRequest
+) {
+  try {
+    const contentData = await insertFileContent(fileId, summary, revisionSheet);
+    const questionsData = await insertFileQuestions(fileId, questions);
+
+    await updateFileStatus(fileKey, "success");
+
+    return { contentData, questionsData };
+  } catch (error) {
+    try {
+      await updateFileStatus(fileKey, "error");
+    } catch (catchError) {
+      request.log.error(
+        { fileKey, catchError },
+        "Failed to update file status to error after inserting data"
+      );
+      throw error;
+    }
+  }
 }
