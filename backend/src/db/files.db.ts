@@ -6,6 +6,20 @@ import {
   DeleteObjectCommand
 } from "@aws-sdk/client-s3";
 import { b2 } from "../db/b2.js";
+import { Queue } from "bullmq";
+
+export type FileQuestion = {
+  fileId: number;
+  question: string;
+  answer: string;
+};
+
+const queue = new Queue("pdf-processing", {
+  connection: {
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT)
+  }
+});
 
 export async function insertFile(
   userId: string,
@@ -13,7 +27,7 @@ export async function insertFile(
   fileKey: string,
   size: number,
   mime: string,
-  status: "pending" | "success" | "error" | "deleted"
+  status: "pending" | "success" | "error" | "deleted" | "processing"
 ) {
   return prisma.file.create({
     data: {
@@ -40,7 +54,7 @@ export async function insertFileB2(key: string, buffer: Buffer, mime: string) {
 
 export async function updateFileStatus(
   fileKey: string,
-  status: "pending" | "success" | "error" | "deleted"
+  status: "pending" | "success" | "error" | "deleted" | "processing"
 ) {
   return prisma.file.update({
     where: { fileKey },
@@ -109,5 +123,32 @@ export function getFileContent(fileId: number) {
 export function getFileQuestions(fileId: number) {
   return prisma.fileQuestion.findMany({
     where: { fileId: fileId }
+  });
+}
+
+export function insertFileContent(FileId: number, summary: string, revisionSheet: string) {
+  return prisma.fileContent.create({
+    data: {
+      fileId: FileId,
+      summary: summary,
+      revisionSheet: revisionSheet
+    }
+  });
+}
+
+export function insertFileQuestions(fileId: number, questions: FileQuestion[]) {
+  return prisma.fileQuestion.createMany({
+    data: questions.map((item) => ({
+      fileId: fileId,
+      question: item.question,
+      answer: item.answer
+    }))
+  });
+}
+
+export async function createNewProcessPdfJob(fileId: number, fileKey: string) {
+  return await queue.add("process-pdf", {
+    fileId: fileId,
+    fileKey: fileKey
   });
 }

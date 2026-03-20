@@ -7,6 +7,7 @@ type FileMetadataData = {
   fileKey: string;
   size: number;
   createdAt: Date;
+  status: string;
 };
 
 type FileContentData = {
@@ -34,26 +35,55 @@ export function useFile(fileKey: string) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getCurrentFile = useCallback(async (fileKey: string) => {
+  const getCurrentFile = useCallback(async (fileKey: string, withLoading: boolean) => {
     setError(null);
-    setLoading(true);
+    if (withLoading) setLoading(true);
 
     try {
       const data = await apiFileFilesByKey(fileKey);
 
       setFile(data.file);
+
+      return data.file;
     } catch (error) {
       console.error("[useFile.getCurrentFile] failed", error);
       setError("Impossible de récupérer le fichier.");
     } finally {
-      setLoading(false);
+      if (withLoading) setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    (async () => {
-      await getCurrentFile(fileKey);
-    })();
+    let interval: ReturnType<typeof setInterval> | null = null;
+
+    const fetchInitial = async () => {
+      const data = await getCurrentFile(fileKey, true);
+
+      if (!data) return;
+
+      console.log(data);
+
+      if (data.fileMetadata.status === "error")
+        setError("Une erreur à eu lieu dans l'analyse du fichier");
+
+      if (data.fileMetadata.status === "processing") {
+        interval = setInterval(async () => {
+          const updated = await getCurrentFile(fileKey, false);
+
+          if (!updated) return;
+
+          if (updated.fileMetadata.status !== "processing" && interval) {
+            clearInterval(interval);
+          }
+        }, 3000);
+      }
+    };
+
+    fetchInitial();
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [getCurrentFile, fileKey]);
 
   return {

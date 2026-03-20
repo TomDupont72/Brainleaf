@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/index";
 import ErrorAlert from "@/components/errorAlert";
 import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 
 export default function File() {
   const { fileKey } = useParams<{ fileKey: string }>();
@@ -40,24 +43,33 @@ export default function File() {
       <div className="px-3 pt-3">
         <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} />
       </div>
-      <div className="flex-1 overflow-y-auto min-h-0 pt-3">
-        <div className="flex flex-col gap-8 my-5 px-8">
-          <h1 className="text-3xl font-semibold pl-6">{file?.fileMetadata.fileName}</h1>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold">Resumé</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-justify">{file?.fileContent.summary}</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold">Fiche de révision</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div
-                className="max-w-none text-sm leading-7
+      {file?.fileMetadata.status === "processing" ? (
+        <div className="flex-1 flex justify-center items-center gap-3">
+          <Spinner className="size-8" />
+          <h3 className="text-md font-semibold">Analyse en cours</h3>
+        </div>
+      ) : (
+        <div className="flex-1 overflow-y-auto min-h-0 pt-3">
+          <div className="flex flex-col gap-8 my-5 px-8">
+            <h1 className="text-3xl font-semibold pl-6">{file?.fileMetadata.fileName}</h1>
+            {file?.fileContent ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl font-semibold">Resumé</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-justify">{file?.fileContent.summary}</p>
+                </CardContent>
+              </Card>
+            ) : null}
+            {file?.fileContent ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl font-semibold">Fiche de révision</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div
+                    className="max-w-none text-sm leading-7
         [&_h1]:text-xl [&_h1]:font-bold [&_h1]:mb-4
         [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:mt-6 [&_h2]:mb-3
         [&_h3]:text-md [&_h3]:font-semibold [&_h3]:mt-4 [&_h3]:mb-2
@@ -67,33 +79,48 @@ export default function File() {
         [&_strong]:font-semibold
         [&_p]:mb-3
         [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:bg-white/10"
-              >
-                <ReactMarkdown>{file?.fileContent.revisionSheet}</ReactMarkdown>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-semibold">Questionnaire</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="multiple">
-                {file?.fileQuestions.map((item) => (
-                  <AccordionItem key={item.id} value={String(item.id)}>
-                    <AccordionTrigger>{item.question}</AccordionTrigger>
-                    <AccordionContent>{item.answer}</AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </CardContent>
-          </Card>
-          <ErrorAlert
-            error={error}
-            className="absolute bottom-8 left-8"
-            setErrorToNull={() => setError(null)}
-          />
+                  >
+                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                      {file?.fileContent.revisionSheet}
+                    </ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : null}
+            {file?.fileQuestions.length !== 0 ? (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-2xl font-semibold">Questionnaire</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="multiple">
+                    {file?.fileQuestions.map((item) => (
+                      <AccordionItem key={item.id} value={String(item.id)}>
+                        <AccordionTrigger>
+                          <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                            {item.question}
+                          </ReactMarkdown>
+                        </AccordionTrigger>
+
+                        <AccordionContent>
+                          <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                            {item.answer}
+                          </ReactMarkdown>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+              </Card>
+            ) : null}
+            <ErrorAlert
+              error={error}
+              className="absolute bottom-8 left-8"
+              setErrorToNull={() => setError(null)}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </main>
   );
 }

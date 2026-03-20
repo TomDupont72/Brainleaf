@@ -71,6 +71,26 @@ jobs:
             sudo systemctl reload nginx || true
           EOF
 
+      - name: Upload worker source
+        run: |
+          rsync -az --delete worker/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/brainleaf/worker/
+
+      - name: Build and restart worker container
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            set -e
+            cd /var/www/brainleaf
+
+            sudo docker build --no-cache -t brainleaf-worker ./worker
+            sudo docker rm -f brainleaf-worker || true
+            sudo docker run -d \
+              --name brainleaf-worker \
+              --network brainleaf-network \
+              --restart always \
+              --env-file /etc/brainleaf-worker.env \
+              brainleaf-worker
+          EOF
+
       - name: Health check
         run: |
           for i in {1..30}; do

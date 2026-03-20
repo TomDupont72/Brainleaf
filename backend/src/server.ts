@@ -5,6 +5,7 @@ import swaggerUI from "@fastify/swagger-ui";
 import { authRoutes } from "./routes/auth.js";
 import fastifyCors from "@fastify/cors";
 import { authGuard } from "./plugins/auth-guard.js";
+import { workerGuard } from "./plugins/worker-guard.js";
 import rateLimit from "@fastify/rate-limit";
 import helmet from "@fastify/helmet";
 import multipart from "@fastify/multipart";
@@ -60,6 +61,7 @@ app.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } });
 await app.register(authRoutes, { prefix: "/api/auth" });
 
 await app.register(authGuard);
+await app.register(workerGuard);
 
 await app.register(fileRoutes, { prefix: "/api/file" });
 
