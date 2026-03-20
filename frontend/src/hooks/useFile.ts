@@ -75,7 +75,7 @@ export function useFile(fileKey: string) {
           if (updated.fileMetadata.status !== "processing" && interval) {
             clearInterval(interval);
           }
-        }, 3000);
+        }, 2000);
       }
     };
 

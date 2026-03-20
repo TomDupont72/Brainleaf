@@ -35,7 +35,7 @@ export default function UploadDialog({
 }: UploadDialogProps) {
   const [open, setOpen] = useState(false);
 
-  const handleUploadFile = async (e: React.MouseEvent) => {
+  const handleUploadFile = async (e: React.SyntheticEvent<HTMLFormElement, Event>) => {
     e.preventDefault();
     if (file) {
       await uploadFile(file);
@@ -54,7 +54,7 @@ export default function UploadDialog({
         <DialogHeader>
           <DialogTitle>Importer un PDF</DialogTitle>
         </DialogHeader>
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={handleUploadFile}>
           <FieldLabel htmlFor="fileName">Nom du fichier</FieldLabel>
           <Input
             id="fileName"
@@ -66,7 +66,7 @@ export default function UploadDialog({
           <Input
             id="file"
             type="file"
-            accept="application/pdf"
+            accept=".pdf,application/pdf"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
             required
           ></Input>
@@ -74,7 +74,7 @@ export default function UploadDialog({
             <DialogClose asChild>
               <Button variant="outline">Annuler</Button>
             </DialogClose>
-            <Button type="submit" onClick={handleUploadFile}>
+            <Button type="submit">
               Importer
             </Button>
           </DialogFooter>
