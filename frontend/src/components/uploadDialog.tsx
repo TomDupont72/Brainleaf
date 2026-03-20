@@ -66,7 +66,7 @@ export default function UploadDialog({
           <Input
             id="file"
             type="file"
-            accept=".pdf,application/pdf"
+            accept="application/pdf"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
             required
           ></Input>

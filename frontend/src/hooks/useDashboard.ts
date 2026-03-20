@@ -19,9 +19,17 @@ export function useDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
   async function uploadFile(file: File) {
     setError(null);
     setLoading(true);
+
+    if (file.size > MAX_FILE_SIZE) {
+      setError("Le fichier dépasse la taille maximale autorisée (10 Mo).");
+      setLoading(false);
+      return;
+    }
 
     try {
       const formData = new FormData();
