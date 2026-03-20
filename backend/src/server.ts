@@ -11,7 +11,7 @@ import helmet from "@fastify/helmet";
 import multipart from "@fastify/multipart";
 import { fileRoutes } from "./routes/files.js";
 
-const app = Fastify({ logger: true, bodyLimit: 1024 * 1024, trustProxy: true });
+const app = Fastify({ logger: true, bodyLimit: 10 * 1024 * 1024, trustProxy: true });
 
 if (process.env.NODE_ENV != "production") {
   await app.register(swagger, {
