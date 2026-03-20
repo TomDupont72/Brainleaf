@@ -81,9 +81,9 @@ jobs:
             set -e
             cd /var/www/brainleaf
 
-            sudo docker build --no-cache -t brainleaf-worker ./worker
-            sudo docker rm -f brainleaf-worker || true
-            sudo docker run -d \
+            docker build --no-cache -t brainleaf-worker ./worker
+            docker rm -f brainleaf-worker || true
+            docker run -d \
               --name brainleaf-worker \
               --network brainleaf-network \
               --restart always \
