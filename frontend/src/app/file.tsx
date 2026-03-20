@@ -58,7 +58,7 @@ export default function File() {
                   <CardTitle className="text-2xl font-semibold">Resumé</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm sm:text-left text-justify">{file?.fileContent.summary}</p>
+                  <p className="text-sm text-left sm:text-justify">{file?.fileContent.summary}</p>
                 </CardContent>
               </Card>
             ) : null}
