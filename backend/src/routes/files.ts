@@ -6,7 +6,7 @@ import {
   getUserFile,
   insertWorkerResult
 } from "../services/files.service.js";
-import { getFiles, FileQuestion } from "../db/files.db.js";
+import { getFiles, FileQuestion, countFiles } from "../db/files.db.js";
 
 type WorkerSuccess = {
   status: "success";
@@ -40,8 +40,12 @@ export async function fileRoutes(fastify: FastifyInstance) {
     { preHandler: [fastify.requireAuth] },
     async function (request: FastifyRequest, reply: FastifyReply) {
       const userId = request.user.id;
+      const { offset = "0", limit = "20" } = request.query as {
+        offset?: string,
+        limit?: string
+      }
 
-      const files = await getFiles(userId);
+      const files = await getFiles(userId, offset, limit);
 
       return reply.send({ files });
     }
@@ -95,4 +99,16 @@ export async function fileRoutes(fastify: FastifyInstance) {
       return reply.send({ data });
     }
   );
+
+  fastify.get(
+    "/count-files",
+    { preHandler: [fastify.requireAuth] },
+    async function (request: FastifyRequest, reply: FastifyReply) {
+      const userId = request.user.id;
+
+      const filesNumber = await countFiles(userId);
+
+      return reply.send({ filesNumber })
+    }
+  )
 }

@@ -5,7 +5,9 @@ export function usePageHeader() {
   const navigate = useNavigate();
 
   const session = JSON.parse(localStorage.getItem("session") || "null");
+
   const username = session?.user?.name ?? "";
+  const theme = localStorage.getItem("theme") ?? "dark";
 
   async function logout() {
     try {
@@ -28,6 +30,7 @@ export function usePageHeader() {
   return {
     username,
     logout,
-    navigateToDashboard
+    navigateToDashboard,
+    theme
   };
 }

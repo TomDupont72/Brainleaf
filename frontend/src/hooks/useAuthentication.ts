@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "react-router-dom";
 import { apiSignIn, apiSignUp } from "@/api/auth";
+import { usePageHeader } from "./usePageHeader";
 
 type AppSession = {
   user: {
@@ -12,10 +13,13 @@ type AppSession = {
   token: string;
   createdAt: Date;
   expiresAt?: Date;
+  theme: "dark" | "light"
 };
 
 export function useAuthentication() {
   const navigate = useNavigate();
+
+  const { theme } = usePageHeader();
 
   const { data: session } = authClient.useSession();
 
@@ -48,6 +52,8 @@ export function useAuthentication() {
         } as AppSession)
       );
 
+      localStorage.setItem("theme", theme);
+
       navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error("[useAuthentication.onSignIn failed]", error);
@@ -78,6 +84,8 @@ export function useAuthentication() {
         } as AppSession)
       );
 
+      localStorage.setItem("theme", theme);;
+
       navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error("[useAuthentication.onRegister failed]", error);
@@ -94,12 +102,14 @@ export function useAuthentication() {
         JSON.stringify({
           user: { email: session.user.email, name: session.user.name, id: session.user.id },
           expiresAt: session.session.expiresAt,
-          createdAt: session.user.createdAt
+          createdAt: session.user.createdAt,
+          theme: theme
         } as AppSession)
       );
       navigate("/dashboard", { replace: true });
     }
-  }, [session, navigate]);
+    localStorage.setItem("theme", theme);
+  }, [session, navigate, theme]);
 
   return {
     log,
@@ -120,6 +130,7 @@ export function useAuthentication() {
     error,
     setError,
     signIn,
-    register
+    register,
+    theme
   };
 }

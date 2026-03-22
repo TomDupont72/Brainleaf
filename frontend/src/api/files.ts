@@ -14,8 +14,8 @@ export async function apiFileUpload(formData: FormData) {
   return res.json();
 }
 
-export async function apiFileFiles() {
-  const res = await fetch(`${apiUrl}/api/file/files`, {
+export async function apiFileFiles(offset: number, limit: number) {
+  const res = await fetch(`${apiUrl}/api/file/files?offset=${offset}&limit=${limit}`, {
     method: "GET",
     credentials: "include"
   });
@@ -46,6 +46,19 @@ export async function apiFileFilesByKey(fileKey: string) {
 
   if (!res.ok) {
     throw new Error("Failed to fetch file");
+  }
+
+  return res.json();
+}
+
+export async function apiFileCountFiles() {
+  const res = await fetch(`${apiUrl}/api/file/count-files`, {
+    method: "GET",
+    credentials: "include"
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to count files");
   }
 
   return res.json();

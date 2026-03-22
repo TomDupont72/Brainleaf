@@ -18,15 +18,17 @@ type PageHeaderProps = {
   username?: string;
   onLogout?: () => void;
   auth: boolean;
+  theme: string
 };
 
-export default function PageHeader({ title, action, username, onLogout, auth }: PageHeaderProps) {
-  const [dark, setDark] = useState(true);
+export default function PageHeader({ title, action, username, onLogout, auth, theme }: PageHeaderProps) {
+  const [dark, setDark] = useState(theme === "dark");
 
   const { navigateToDashboard } = usePageHeader();
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
+    localStorage.setItem("theme", dark ? "dark" : "light");
   }, [dark]);
 
   return (
