@@ -84,7 +84,9 @@ export function useDashboard() {
     try {
       await apiFileDelete(fileKey);
 
-      setFiles((prev) => prev.filter((f) => f.fileKey !== fileKey));
+      const filesData = await getFiles(MAX_FILE_PER_PAGE * (currentPage - 1), MAX_FILE_PER_PAGE);
+
+      setFiles(filesData.files);
     } catch (error) {
       console.error("[useDashboard.deleteFile] failed", error);
       setError("Impossible de supprimer le fichier.");
