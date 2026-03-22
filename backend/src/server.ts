@@ -28,10 +28,8 @@ if (process.env.NODE_ENV != "production") {
   });
 }
 
-await app.register(helmet, {
-  contentSecurityPolicy: false,
-  frameguard: false
-});
+await app.register(helmet);
+
 await app.register(rateLimit, { max: 100, timeWindow: "1 minute" });
 
 app.get(
