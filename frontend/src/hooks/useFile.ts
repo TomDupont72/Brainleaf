@@ -61,8 +61,6 @@ export function useFile(fileKey: string) {
 
       if (!data) return;
 
-      console.log(data);
-
       if (data.fileMetadata.status === "error")
         setError("Une erreur à eu lieu dans l'analyse du fichier");
 

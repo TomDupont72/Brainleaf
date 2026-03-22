@@ -62,7 +62,7 @@ export async function updateFileStatus(
   });
 }
 
-export async function getFiles(userId: string) {
+export async function getFiles(userId: string, offset: string, limit: string) {
   return prisma.file.findMany({
     where: { userId },
     select: {
@@ -75,7 +75,8 @@ export async function getFiles(userId: string) {
       status: true
     },
     orderBy: { createdAt: "desc" },
-    take: 20
+    skip: Number(offset),
+    take: Number(limit)
   });
 }
 
@@ -151,4 +152,10 @@ export async function createNewProcessPdfJob(fileId: number, fileKey: string) {
     fileId: fileId,
     fileKey: fileKey
   });
+}
+
+export async function countFiles(userId: string) {
+  return await prisma.file.count({
+    where: { userId: userId}
+  })
 }

@@ -32,3 +32,12 @@ export {
   AccordionTrigger,
   AccordionContent
 } from "@/components/ui/accordion";
+export {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
