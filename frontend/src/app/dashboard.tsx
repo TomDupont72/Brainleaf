@@ -38,34 +38,50 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <main className="h-screen flex flex-col overflow-hidden">
+      <main className="h-dvh flex flex-col overflow-hidden">
         <div className="px-3 pt-3 shrink-0">
-          <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} theme={theme}/>
+          <PageHeader
+            title="Brainleaf"
+            username={username}
+            onLogout={logout}
+            auth={true}
+            theme={theme}
+          />
         </div>
         <div className="flex-1 flex justify-center items-center">
           <Spinner className="size-8" />
         </div>
         <div>
-          <Paginator currentPage={currentPage} pageNumber={pageNumber} setCurrentPage={setCurrentPage} />
+          <Paginator
+            currentPage={currentPage}
+            pageNumber={pageNumber}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
         <UploadDialog
-            file={file}
-            setFile={setFile}
-            setFileName={setFileName}
-            uploadFile={uploadFile}
-            title={<Upload className="size-lg" />}
-            variant="outline"
-            size="icon"
-            className="fixed right-8 bottom-8 z-50 w-12 h-12 rounded-full backdrop-blur-md"
-          />
+          file={file}
+          setFile={setFile}
+          setFileName={setFileName}
+          uploadFile={uploadFile}
+          title={<Upload className="size-lg" />}
+          variant="outline"
+          size="icon"
+          className="fixed right-8 bottom-8 z-50 w-12 h-12 rounded-full backdrop-blur-md"
+        />
       </main>
     );
   }
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden">
+    <main className="h-dvh flex flex-col overflow-hidden">
       <div className="px-3 pt-3 shrink-0">
-        <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} theme={theme}/>
+        <PageHeader
+          title="Brainleaf"
+          username={username}
+          onLogout={logout}
+          auth={true}
+          theme={theme}
+        />
       </div>
 
       {files.length > 0 ? (
@@ -106,7 +122,10 @@ export default function Dashboard() {
                       </Dialog>
                       <div className="flex flex-col items-center justify-center gap-4 px-14">
                         <div className="flex flex-col justify-center h-[calc(2*1lh)]">
-                          <h3 key={file.id} className="text-md font-semibold text-center line-clamp-2">
+                          <h3
+                            key={file.id}
+                            className="text-md font-semibold text-center line-clamp-2"
+                          >
                             {file.fileName}
                           </h3>
                         </div>
@@ -119,7 +138,11 @@ export default function Dashboard() {
                 ))}
               </div>
               <div className="flex-1" />
-              <Paginator currentPage={currentPage} pageNumber={pageNumber} setCurrentPage={setCurrentPage} />
+              <Paginator
+                currentPage={currentPage}
+                pageNumber={pageNumber}
+                setCurrentPage={setCurrentPage}
+              />
             </div>
           </div>
 

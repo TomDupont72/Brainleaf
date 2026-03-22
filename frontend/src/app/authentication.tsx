@@ -32,7 +32,7 @@ export default function Authentication() {
   return (
     <main className="h-screen flex flex-col">
       <div className="px-3 pt-3">
-        <PageHeader title="Brainleaf" auth={false} theme={theme}/>
+        <PageHeader title="Brainleaf" auth={false} theme={theme} />
       </div>
       <AnimatePresence mode="wait">
         {log === "signIn" ? (

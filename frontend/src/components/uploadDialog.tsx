@@ -74,9 +74,7 @@ export default function UploadDialog({
             <DialogClose asChild>
               <Button variant="outline">Annuler</Button>
             </DialogClose>
-            <Button type="submit">
-              Importer
-            </Button>
+            <Button type="submit">Importer</Button>
           </DialogFooter>
         </form>
       </DialogContent>

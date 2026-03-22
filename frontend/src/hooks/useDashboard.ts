@@ -66,7 +66,7 @@ export function useDashboard() {
       const data = await apiFileFiles(offset, limit);
       const pageNumberData = await apiFileCountFiles();
 
-      setPageNumber(Math.floor(pageNumberData.filesNumber / MAX_FILE_PER_PAGE) + 1);
+      setPageNumber(Math.floor((pageNumberData.filesNumber - 1) / MAX_FILE_PER_PAGE) + 1);
 
       return data;
     } catch (error) {

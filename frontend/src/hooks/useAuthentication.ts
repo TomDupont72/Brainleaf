@@ -13,7 +13,7 @@ type AppSession = {
   token: string;
   createdAt: Date;
   expiresAt?: Date;
-  theme: "dark" | "light"
+  theme: "dark" | "light";
 };
 
 export function useAuthentication() {
@@ -84,7 +84,7 @@ export function useAuthentication() {
         } as AppSession)
       );
 
-      localStorage.setItem("theme", theme);;
+      localStorage.setItem("theme", theme);
 
       navigate("/dashboard", { replace: true });
     } catch (error) {

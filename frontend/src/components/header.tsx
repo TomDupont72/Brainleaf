@@ -18,10 +18,17 @@ type PageHeaderProps = {
   username?: string;
   onLogout?: () => void;
   auth: boolean;
-  theme: string
+  theme: string;
 };
 
-export default function PageHeader({ title, action, username, onLogout, auth, theme }: PageHeaderProps) {
+export default function PageHeader({
+  title,
+  action,
+  username,
+  onLogout,
+  auth,
+  theme
+}: PageHeaderProps) {
   const [dark, setDark] = useState(theme === "dark");
 
   const { navigateToDashboard } = usePageHeader();
