@@ -156,6 +156,6 @@ export async function createNewProcessPdfJob(fileId: number, fileKey: string) {
 
 export async function countFiles(userId: string) {
   return await prisma.file.count({
-    where: { userId: userId}
-  })
+    where: { userId: userId }
+  });
 }

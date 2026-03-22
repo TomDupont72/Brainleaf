@@ -142,7 +142,8 @@ body {
   background: #888;
 }
 
-html, body {
+html,
+body {
   overflow: hidden;
   height: 100%;
 }

@@ -27,9 +27,15 @@ export default function File() {
 
   if (loading) {
     return (
-      <main className="h-screen flex flex-col overflow-hidden">
+      <main className="h-dvh flex flex-col overflow-hidden">
         <div className="px-3 pt-3 shrink-0">
-          <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} theme={theme}/>
+          <PageHeader
+            title="Brainleaf"
+            username={username}
+            onLogout={logout}
+            auth={true}
+            theme={theme}
+          />
         </div>
         <div className="flex-1 flex justify-center items-center">
           <Spinner className="size-8" />
@@ -39,9 +45,15 @@ export default function File() {
   }
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden">
+    <main className="h-dvh flex flex-col overflow-hidden">
       <div className="px-3 pt-3 shrink-0">
-        <PageHeader title="Brainleaf" username={username} onLogout={logout} auth={true} theme={theme}/>
+        <PageHeader
+          title="Brainleaf"
+          username={username}
+          onLogout={logout}
+          auth={true}
+          theme={theme}
+        />
       </div>
       {file?.fileMetadata.status === "processing" ? (
         <div className="flex-1 flex justify-center items-center gap-3">
@@ -59,8 +71,9 @@ export default function File() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-sm text-left sm:text-justify">
-                  <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                          {file?.fileContent.summary}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                      {file?.fileContent.summary}
+                    </ReactMarkdown>
                   </div>
                 </CardContent>
               </Card>

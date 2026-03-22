@@ -41,9 +41,9 @@ export async function fileRoutes(fastify: FastifyInstance) {
     async function (request: FastifyRequest, reply: FastifyReply) {
       const userId = request.user.id;
       const { offset = "0", limit = "20" } = request.query as {
-        offset?: string,
-        limit?: string
-      }
+        offset?: string;
+        limit?: string;
+      };
 
       const files = await getFiles(userId, offset, limit);
 
@@ -108,7 +108,7 @@ export async function fileRoutes(fastify: FastifyInstance) {
 
       const filesNumber = await countFiles(userId);
 
-      return reply.send({ filesNumber })
+      return reply.send({ filesNumber });
     }
-  )
+  );
 }

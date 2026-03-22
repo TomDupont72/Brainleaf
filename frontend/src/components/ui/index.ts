@@ -39,5 +39,5 @@ export {
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
+  PaginationPrevious
+} from "@/components/ui/pagination";
