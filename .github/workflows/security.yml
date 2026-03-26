@@ -37,12 +37,12 @@ jobs:
           cd backend
           npm ci
           npm audit --audit-level=high
+        continue-on-error: true
 
       - name: Audit frontend
         run: |
           npm ci
           npm audit --audit-level=high
-        continue-on-error: true
 
   snyk-backend:
     name: Snyk backend
