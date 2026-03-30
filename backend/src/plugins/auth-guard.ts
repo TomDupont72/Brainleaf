@@ -9,7 +9,7 @@ async function authGuardPlugin(app: FastifyInstance) {
       headers: fromNodeHeaders(req.headers)
     });
 
-    if (!session) {
+    if (!session?.session?.userId) {
       return reply.status(401).send({ message: "Unauthorized" });
     }
 

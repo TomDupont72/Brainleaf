@@ -1,4 +1,5 @@
 import { apiFileCountFiles, apiFileDelete, apiFileFiles, apiFileUpload } from "@/api/files";
+import { UploadFileSchema } from "@/modules/files.schemas";
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -22,7 +23,6 @@ export function useDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILE_PER_PAGE = 20;
 
   const rawPage = Number(searchParams.get("page") ?? "1");
@@ -36,17 +36,25 @@ export function useDashboard() {
     setError(null);
     setLoading(true);
 
-    if (file.size > MAX_FILE_SIZE) {
-      setError("Le fichier dépasse la taille maximale autorisée (10 Mo).");
+    const formData = {
+      fileName: fileName,
+      size: file.size
+    };
+
+    const result = UploadFileSchema.safeParse(formData);
+
+    if (!result.success) {
+      const firstIssue = result.error.issues[0];
+      setError(firstIssue?.message ?? "Formulaire invalide.");
       setLoading(false);
       return;
     }
 
     try {
-      const formData = new FormData();
-      formData.append("file", file, fileName);
+      const fileFormData = new FormData();
+      fileFormData.append("file", file, result.data.fileName);
 
-      const data = await apiFileUpload(formData);
+      const data = await apiFileUpload(fileFormData);
 
       setFile(null);
       setFileName("");

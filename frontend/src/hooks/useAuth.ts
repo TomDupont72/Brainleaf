@@ -3,6 +3,7 @@ import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "react-router-dom";
 import { apiSignIn, apiSignUp } from "@/api/auth";
 import { usePageHeader } from "./usePageHeader";
+import { RegisterSchema, SignInSchema } from "@/modules/auth.schemas";
 
 type AppSession = {
   user: {
@@ -16,7 +17,7 @@ type AppSession = {
   theme: "dark" | "light";
 };
 
-export function useAuthentication() {
+export function useAuth() {
   const navigate = useNavigate();
 
   const { theme } = usePageHeader();
@@ -41,8 +42,22 @@ export function useAuthentication() {
     setError(null);
     setLoading(true);
 
+    const formData = {
+      email: emailSI,
+      password: passwordSI
+    };
+
+    const result = SignInSchema.safeParse(formData);
+
+    if (!result.success) {
+      const firstIssue = result.error.issues[0];
+      setError(firstIssue?.message ?? "Formulaire invalide.");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const data = await apiSignIn(emailSI, passwordSI);
+      const data = await apiSignIn(result.data.email, result.data.password);
 
       localStorage.setItem(
         "session",
@@ -56,7 +71,7 @@ export function useAuthentication() {
 
       navigate("/dashboard", { replace: true });
     } catch (error) {
-      console.error("[useAuthentication.onSignIn failed]", error);
+      console.error("[useAuth.onSignIn failed]", error);
       setError("Impossible de se connecter.");
     } finally {
       setLoading(false);
@@ -68,13 +83,24 @@ export function useAuthentication() {
     setError(null);
     setLoading(true);
 
-    if (passwordR !== passwordConfirmR) {
-      setError("Les mots de passe ne correspondent pas.");
+    const formData = {
+      email: emailR,
+      password: passwordR,
+      passwordConfirm: passwordConfirmR,
+      username: usernameR
+    }
+
+    const result = RegisterSchema.safeParse(formData);
+
+    if (!result.success) {
+      const firstIssue = result.error.issues[0];
+      setError(firstIssue?.message ?? "Formulaire invalide.");
+      setLoading(false);
       return;
     }
 
     try {
-      const data = await apiSignUp(emailR, passwordR, usernameR);
+      const data = await apiSignUp(result.data.email, result.data.password, result.data.username);
 
       localStorage.setItem(
         "session",
@@ -88,7 +114,7 @@ export function useAuthentication() {
 
       navigate("/dashboard", { replace: true });
     } catch (error) {
-      console.error("[useAuthentication.onRegister failed]", error);
+      console.error("[useAuth.onRegister failed]", error);
       setError("Impossible de s'inscrire.");
     } finally {
       setLoading(false);

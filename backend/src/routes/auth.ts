@@ -1,44 +1,32 @@
 import type { FastifyInstance } from "fastify";
 import { auth } from "../auth.js";
 
-export async function authRoutes(app: FastifyInstance) {
-  app.route({
-    method: ["GET", "POST", "OPTIONS"],
+export async function authRoutes(fastify: FastifyInstance) {
+  // Register authentication endpoint
+  fastify.route({
+    method: ["GET", "POST"],
     url: "/*",
-    handler: async (req, reply) => {
-      const rawUrl = req.raw.url ?? req.url;
-
-      const stripped = rawUrl.startsWith("/auth") ? rawUrl.slice("/auth".length) || "/" : rawUrl;
-
-      const url = new URL(stripped, `${req.protocol}://${req.headers.host}`);
-
-      const body =
-        req.method === "GET" || req.method === "HEAD"
-          ? undefined
-          : req.body
-            ? JSON.stringify(req.body)
-            : undefined;
-
+    async handler(request, reply) {
+      // Construct request URL
+      const url = new URL(request.url, `http://${request.headers.host}`);
+      
+      // Convert Fastify headers to standard Headers object
       const headers = new Headers();
-      for (const [k, v] of Object.entries(req.headers)) {
-        if (typeof v === "string") headers.set(k, v);
-        else if (Array.isArray(v)) headers.set(k, v.join(","));
-      }
-      if (body) headers.set("content-type", "application/json");
-
-      const webReq = new Request(url.toString(), {
-        method: req.method,
-        headers,
-        body
+      Object.entries(request.headers).forEach(([key, value]) => {
+        if (value) headers.append(key, value.toString());
       });
-
-      const res = await auth.handler(webReq);
-
-      reply.status(res.status);
-      res.headers.forEach((value, key) => reply.header(key, value));
-
-      const text = await res.text();
-      reply.send(text);
+      // Create Fetch API-compatible request
+      const req = new Request(url.toString(), {
+        method: request.method,
+        headers,
+        ...(request.body ? { body: JSON.stringify(request.body) } : {}),
+      });
+      // Process authentication request
+      const response = await auth.handler(req);
+      // Forward response to client
+      reply.status(response.status);
+      response.headers.forEach((value, key) => reply.header(key, value));
+      reply.send(response.body ? await response.text() : null);
     }
   });
 }
