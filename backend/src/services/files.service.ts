@@ -1,7 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { MultipartFile } from "@fastify/multipart";
-import { ApiError } from "./ApiError.js";
-import { FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import {
   insertFile,
   insertFileB2,
@@ -18,8 +16,7 @@ import {
   FileQuestion
 } from "../db/files.db.js";
 
-export async function uploadUserFile(userId: string, data: MultipartFile, request: FastifyRequest) {
-  const buffer = await data.toBuffer();
+export async function uploadUserFile(userId: string, fileName: string, mimeType: string, buffer: Buffer<ArrayBufferLike>, request: FastifyRequest) {
   const key = randomUUID();
 
   let fileCreated = false;
@@ -27,15 +24,15 @@ export async function uploadUserFile(userId: string, data: MultipartFile, reques
   try {
     const file = await insertFile(
       userId,
-      data.filename,
+      fileName,
       key,
       buffer.length,
-      data.mimetype,
+      mimeType,
       "pending"
     );
     fileCreated = true;
 
-    await insertFileB2(key, buffer, data.mimetype);
+    await insertFileB2(key, buffer, mimeType);
 
     await createNewProcessPdfJob(file.id, key);
 
@@ -55,14 +52,16 @@ export async function uploadUserFile(userId: string, data: MultipartFile, reques
   }
 }
 
-export async function deleteUserFile(userId: string, fileKey: string, request: FastifyRequest) {
+export async function deleteUserFile(userId: string, fileKey: string, request: FastifyRequest, reply: FastifyReply) {
   let deletedFromB2 = false;
 
   try {
     const file = await getFile(userId, fileKey);
 
     if (!file) {
-      throw new ApiError("Fichier non trouvé", "404");
+      return reply.status(404).send({
+        error: "Fichier non trouvé."
+      });
     }
 
     const versions = await getFileB2(fileKey);
@@ -86,11 +85,13 @@ export async function deleteUserFile(userId: string, fileKey: string, request: F
   }
 }
 
-export async function getUserFile(userId: string, fileKey: string) {
+export async function getUserFile(userId: string, fileKey: string, reply: FastifyReply) {
   const fileMetadata = await getFile(userId, fileKey);
 
   if (!fileMetadata) {
-    throw new ApiError("Fichier non trouvé", "404");
+    return reply.status(404).send({
+      error: "Fichier non trouvé."
+    });
   }
 
   const fileContent = await getFileContent(fileMetadata.id);

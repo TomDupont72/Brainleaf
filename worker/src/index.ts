@@ -1,26 +1,23 @@
 import { Worker } from "bullmq";
 import { processPdf } from "./processor";
 
-async function start() {
-  if (process.env.NODE_ENV !== "production") {
-    const dotenv = await import("dotenv");
-    dotenv.config();
-  }
+const connection = {
+  host: process.env.REDIS_HOST,
+  port: Number(process.env.REDIS_PORT)
+};
 
-  const connection = {
-    host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT)
-  };
+const worker = new Worker(
+  "pdf-processing",
+  async (job) => {
+    return processPdf(job.data);
+  },
+  { connection }
+);
 
-  new Worker(
-    "pdf-processing",
-    async (job) => {
-      return await processPdf(job.data);
-    },
-    { connection }
-  );
+worker.on("completed", (job) => {
+  console.log(`Job ${job.id} done`);
+});
 
-  console.log("Worker started...");
-}
-
-start();
+worker.on("failed", (job, err) => {
+  console.error(`Job ${job?.id} failed:`, err);
+});

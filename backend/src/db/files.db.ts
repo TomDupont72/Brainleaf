@@ -9,7 +9,6 @@ import { b2 } from "../db/b2.js";
 import { Queue } from "bullmq";
 
 export type FileQuestion = {
-  fileId: number;
   question: string;
   answer: string;
 };
@@ -62,7 +61,7 @@ export async function updateFileStatus(
   });
 }
 
-export async function getFiles(userId: string, offset: string, limit: string) {
+export async function getFiles(userId: string, offset: number, limit: number) {
   return prisma.file.findMany({
     where: { userId },
     select: {
@@ -75,8 +74,8 @@ export async function getFiles(userId: string, offset: string, limit: string) {
       status: true
     },
     orderBy: { createdAt: "desc" },
-    skip: Number(offset),
-    take: Number(limit)
+    skip: offset,
+    take: limit
   });
 }
 

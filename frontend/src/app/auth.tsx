@@ -2,10 +2,10 @@ import { Button, Card, FieldLabel, Input } from "@/components/ui/index";
 import PageHeader from "@/components/header";
 import InputPassword from "@/components/inputPassword";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuthentication } from "@/hooks/useAuthentication";
+import { useAuth } from "@/hooks/useAuth";
 import ErrorAlert from "@/components/errorAlert";
 
-export default function Authentication() {
+export default function Auth() {
   const {
     log,
     setLog,
@@ -27,7 +27,7 @@ export default function Authentication() {
     signIn,
     register,
     theme
-  } = useAuthentication();
+  } = useAuth();
 
   return (
     <main className="h-screen flex flex-col">

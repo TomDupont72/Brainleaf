@@ -39,7 +39,7 @@ export async function apiFileDelete(fileKey: string) {
 }
 
 export async function apiFileFilesByKey(fileKey: string) {
-  const res = await fetch(`${apiUrl}/api/file/files/${fileKey}`, {
+  const res = await fetch(`${apiUrl}/api/file/file-by-filekey/${fileKey}`, {
     method: "GET",
     credentials: "include"
   });

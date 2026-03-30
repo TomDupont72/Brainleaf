@@ -37,7 +37,6 @@ jobs:
           cd backend
           npm ci
           npm audit --audit-level=high
-        continue-on-error: true
 
       - name: Audit frontend
         run: |
