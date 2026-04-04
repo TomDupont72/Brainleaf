@@ -16,20 +16,19 @@ import {
   FileQuestion
 } from "../db/files.db.js";
 
-export async function uploadUserFile(userId: string, fileName: string, mimeType: string, buffer: Buffer<ArrayBufferLike>, request: FastifyRequest) {
+export async function uploadUserFile(
+  userId: string,
+  fileName: string,
+  mimeType: string,
+  buffer: Buffer<ArrayBufferLike>,
+  request: FastifyRequest
+) {
   const key = randomUUID();
 
   let fileCreated = false;
 
   try {
-    const file = await insertFile(
-      userId,
-      fileName,
-      key,
-      buffer.length,
-      mimeType,
-      "pending"
-    );
+    const file = await insertFile(userId, fileName, key, buffer.length, mimeType, "pending");
     fileCreated = true;
 
     await insertFileB2(key, buffer, mimeType);
@@ -52,7 +51,12 @@ export async function uploadUserFile(userId: string, fileName: string, mimeType:
   }
 }
 
-export async function deleteUserFile(userId: string, fileKey: string, request: FastifyRequest, reply: FastifyReply) {
+export async function deleteUserFile(
+  userId: string,
+  fileKey: string,
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
   let deletedFromB2 = false;
 
   try {

@@ -91,24 +91,24 @@ jobs:
         with:
           command: test
           args: --severity-threshold=high --file=package.json
-          
+
   snyk-worker:
     name: Snyk worker
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-  
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: 20
-  
+
       - name: Install worker dependencies
         run: |
           cd worker
           npm ci
-  
+
       - name: Run Snyk on worker
         uses: snyk/actions/node@master
         env:

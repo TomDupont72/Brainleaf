@@ -1,7 +1,8 @@
 import { apiFileCountFiles, apiFileDelete, apiFileFiles, apiFileUpload } from "@/api/files";
 import { UploadFileSchema } from "@/modules/files.schemas";
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type FileData = {
   id: number;
@@ -13,15 +14,13 @@ type FileData = {
 
 export function useDashboard() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [file, setFile] = useState<File | null>(null);
-  const [files, setFiles] = useState<FileData[]>([]);
   const [fileName, setFileName] = useState("");
-  const [pageNumber, setPageNumber] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const MAX_FILE_PER_PAGE = 20;
 
@@ -32,87 +31,88 @@ export function useDashboard() {
     setSearchParams({ page: String(page) });
   };
 
-  async function uploadFile(file: File) {
-    setError(null);
-    setLoading(true);
+  const filesQuery = useQuery({
+    queryKey: ["files", currentPage],
+    queryFn: async () => {
+      const offset = MAX_FILE_PER_PAGE * (currentPage - 1);
+      return apiFileFiles(offset, MAX_FILE_PER_PAGE);
+    },
+    placeholderData: (previousData) => previousData
+  });
 
-    const formData = {
-      fileName: fileName,
-      size: file.size
-    };
-
-    const result = UploadFileSchema.safeParse(formData);
-
-    if (!result.success) {
-      const firstIssue = result.error.issues[0];
-      setError(firstIssue?.message ?? "Formulaire invalide.");
-      setLoading(false);
-      return;
+  const countQuery = useQuery({
+    queryKey: ["filesCount"],
+    queryFn: async () => {
+      return apiFileCountFiles();
     }
+  });
 
-    try {
+  const uploadMutation = useMutation({
+    mutationFn: async (fileToUpload: File) => {
+      const formData = {
+        fileName,
+        size: fileToUpload.size
+      };
+
+      const result = UploadFileSchema.safeParse(formData);
+
+      if (!result.success) {
+        const firstIssue = result.error.issues[0];
+        throw new Error(firstIssue?.message ?? "Formulaire invalide.");
+      }
+
       const fileFormData = new FormData();
-      fileFormData.append("file", file, result.data.fileName);
+      fileFormData.append("file", fileToUpload, result.data.fileName);
 
-      const data = await apiFileUpload(fileFormData);
-
+      return apiFileUpload(fileFormData);
+    },
+    onSuccess: (data) => {
       setFile(null);
       setFileName("");
+      setFormError(null);
+
+      queryClient.invalidateQueries({ queryKey: ["files"] });
+      queryClient.invalidateQueries({ queryKey: ["filesCount"] });
 
       navigate(`/file/${data.file.fileKey}`);
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error("[useDashboard.uploadFile] failed", error);
-      setError("L'upload a échoué.");
+      setFormError(error instanceof Error ? error.message : "L'upload a échoué.");
     }
-  }
+  });
 
-  const getFiles = useCallback(async (offset: number, limit: number) => {
-    setError(null);
-    setLoading(true);
-
-    try {
-      const data = await apiFileFiles(offset, limit);
-      const pageNumberData = await apiFileCountFiles();
-
-      setPageNumber(Math.floor((pageNumberData.filesNumber - 1) / MAX_FILE_PER_PAGE) + 1);
-
-      return data;
-    } catch (error) {
-      console.error("[useDashboard.getFiles] failed", error);
-      setError("Impossible de récupérer les fichiers.");
-    } finally {
-      setLoading(false);
+  const deleteMutation = useMutation({
+    mutationFn: async (fileKey: string) => {
+      await apiFileDelete(fileKey);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["files"] });
+      await queryClient.invalidateQueries({ queryKey: ["filesCount"] });
+    },
+    onError: (error) => {
+      console.error("[useDashboard.deleteFile] failed", error);
+      setFormError("Impossible de supprimer le fichier.");
     }
-  }, []);
+  });
+
+  const uploadFile = async (fileToUpload: File) => {
+    setFormError(null);
+    await uploadMutation.mutateAsync(fileToUpload);
+  };
 
   const deleteFile = async (fileKey: string) => {
-    setError(null);
-    setLoading(true);
-
-    try {
-      await apiFileDelete(fileKey);
-
-      const filesData = await getFiles(MAX_FILE_PER_PAGE * (currentPage - 1), MAX_FILE_PER_PAGE);
-
-      setFiles(filesData.files);
-    } catch (error) {
-      console.error("[useDashboard.deleteFile] failed", error);
-      setError("Impossible de supprimer le fichier.");
-    } finally {
-      setLoading(false);
-    }
+    setFormError(null);
+    await deleteMutation.mutateAsync(fileKey);
   };
 
   const navigateToFile = (fileKey: string) => {
     navigate(`/file/${fileKey}`);
   };
 
-  useEffect(() => {
-    (async () => {
-      const filesData = await getFiles(MAX_FILE_PER_PAGE * (currentPage - 1), MAX_FILE_PER_PAGE);
-      setFiles(filesData.files);
-    })();
-  }, [getFiles, currentPage]);
+  const files: FileData[] = filesQuery.data?.files ?? [];
+  const totalFiles = countQuery.data?.filesNumber ?? 0;
+  const pageNumber = totalFiles > 0 ? Math.floor((totalFiles - 1) / MAX_FILE_PER_PAGE) + 1 : 1;
 
   return {
     uploadFile,
@@ -122,9 +122,16 @@ export function useDashboard() {
     setFileName,
     deleteFile,
     navigateToFile,
-    loading,
-    error,
-    setError,
+    loading:
+      filesQuery.isLoading ||
+      countQuery.isLoading ||
+      uploadMutation.isPending ||
+      deleteMutation.isPending,
+    error:
+      formError ||
+      (filesQuery.isError ? "Impossible de récupérer les fichiers." : null) ||
+      (countQuery.isError ? "Impossible de récupérer le nombre de fichiers." : null),
+    setError: setFormError,
     currentPage,
     pageNumber,
     setCurrentPage

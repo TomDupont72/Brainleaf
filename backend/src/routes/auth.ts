@@ -9,7 +9,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     async handler(request, reply) {
       // Construct request URL
       const url = new URL(request.url, `http://${request.headers.host}`);
-      
+
       // Convert Fastify headers to standard Headers object
       const headers = new Headers();
       Object.entries(request.headers).forEach(([key, value]) => {
@@ -19,7 +19,7 @@ export async function authRoutes(fastify: FastifyInstance) {
       const req = new Request(url.toString(), {
         method: request.method,
         headers,
-        ...(request.body ? { body: JSON.stringify(request.body) } : {}),
+        ...(request.body ? { body: JSON.stringify(request.body) } : {})
       });
       // Process authentication request
       const response = await auth.handler(req);

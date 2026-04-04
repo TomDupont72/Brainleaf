@@ -14,14 +14,16 @@ export async function processPdf(data: WorkerJobData): Promise<void> {
 
     const rawText = await extractTextFromPdf(bytes);
 
-    const cleanedText = rawText.replace(/\n{2,}/g, "\n").replace(/-- \d+ of \d+ --/g, "").trim();
+    const cleanedText = rawText
+      .replace(/\n{2,}/g, "\n")
+      .replace(/-- \d+ of \d+ --/g, "")
+      .trim();
 
     const result = await generateCourseMaterial(cleanedText);
 
     await sendSuccessResult(data.fileId, data.fileKey, result);
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown worker error";
+    const errorMessage = error instanceof Error ? error.message : "Unknown worker error";
 
     await sendFailedResult(data.fileId, data.fileKey, errorMessage);
     throw error;

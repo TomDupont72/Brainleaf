@@ -6,7 +6,13 @@ import {
   insertWorkerResult
 } from "../services/files.service.js";
 import { getFiles, FileQuestion, countFiles } from "../db/files.db.js";
-import { FileDeleteSchema, FileFileByFilekeySchema, FileFilesSchema, FileInsertWorkerResult, FileUploadSchema } from "../modules/files.schemas.js";
+import {
+  FileDeleteSchema,
+  FileFileByFilekeySchema,
+  FileFilesSchema,
+  FileInsertWorkerResult,
+  FileUploadSchema
+} from "../modules/files.schemas.js";
 
 type WorkerSuccess = {
   status: "success";
@@ -28,11 +34,11 @@ export async function fileRoutes(fastify: FastifyInstance) {
   fastify.post("/upload", { preHandler: [fastify.requireAuth] }, async (request, reply) => {
     const data = await request.file();
 
-    if (!data){
+    if (!data) {
       return reply.status(400).send({
         error: "Fichier non reçu."
-      })
-    };
+      });
+    }
 
     const buffer = await data.toBuffer();
 
@@ -48,10 +54,16 @@ export async function fileRoutes(fastify: FastifyInstance) {
       return reply.status(400).send({
         error: "Fichier invalide.",
         details: result.error.issues
-      })
-    };
+      });
+    }
 
-    const file = await uploadUserFile(request.user.id, result.data.fileName, result.data.mimeType, buffer, request);
+    const file = await uploadUserFile(
+      request.user.id,
+      result.data.fileName,
+      result.data.mimeType,
+      buffer,
+      request
+    );
 
     return reply.send({ file });
   });
@@ -77,7 +89,7 @@ export async function fileRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({
           error: "Requete invalide.",
           details: result.error.issues
-        })
+        });
       }
 
       const files = await getFiles(userId, result.data.offset, result.data.limit);
@@ -103,7 +115,7 @@ export async function fileRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({
           error: "Requete invalide.",
           details: result.error.issues
-        })
+        });
       }
 
       const file = await deleteUserFile(userId, result.data.fileKey, request, reply);
@@ -129,7 +141,7 @@ export async function fileRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({
           error: "Requete invalide.",
           details: result.error.issues
-        })
+        });
       }
 
       const file = await getUserFile(userId, fileKey, reply);
@@ -158,17 +170,17 @@ export async function fileRoutes(fastify: FastifyInstance) {
         questions: body.questions
       };
 
-      console.log(formData)
+      console.log(formData);
 
       const result = FileInsertWorkerResult.safeParse(formData);
 
-      console.log(result)
+      console.log(result);
 
       if (!result.success) {
         return reply.status(400).send({
           error: "Résultat du LLM invalide.",
           details: result.error.issues
-        })
+        });
       }
 
       const data = await insertWorkerResult(
