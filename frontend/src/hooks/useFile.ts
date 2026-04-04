@@ -1,5 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState } from "react";
 import { apiFileFilesByKey } from "../api/files";
+import { useQuery } from "@tanstack/react-query";
 
 type FileMetadataData = {
   id: number;
@@ -31,63 +32,26 @@ type FileData = {
 };
 
 export function useFile(fileKey: string) {
-  const [file, setFile] = useState<FileData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
-  const getCurrentFile = useCallback(async (fileKey: string, withLoading: boolean) => {
-    setError(null);
-    if (withLoading) setLoading(true);
-
-    try {
+  const currentFileQuery = useQuery({
+    queryKey: ["file", fileKey],
+    queryFn: async () => {
       const data = await apiFileFilesByKey(fileKey);
-
-      setFile(data.file);
-
       return data.file;
-    } catch (error) {
-      console.error("[useFile.getCurrentFile] failed", error);
-      setError("Impossible de récupérer le fichier.");
-    } finally {
-      if (withLoading) setLoading(false);
+    },
+    refetchInterval: (query) => {
+      const status = query.state.data?.fileMetadata.status;
+      return status === "processing" || !status ? 2000 : false;
     }
-  }, []);
+  });
 
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | null = null;
-
-    const fetchInitial = async () => {
-      const data = await getCurrentFile(fileKey, true);
-
-      if (!data) return;
-
-      if (data.fileMetadata.status === "error")
-        setError("Une erreur à eu lieu dans l'analyse du fichier");
-
-      if (data.fileMetadata.status === "processing") {
-        interval = setInterval(async () => {
-          const updated = await getCurrentFile(fileKey, false);
-
-          if (!updated) return;
-
-          if (updated.fileMetadata.status !== "processing" && interval) {
-            clearInterval(interval);
-          }
-        }, 2000);
-      }
-    };
-
-    fetchInitial();
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [getCurrentFile, fileKey]);
+  const file: FileData = currentFileQuery.data ?? null;
 
   return {
     file,
-    loading,
-    error,
-    setError
+    loading: currentFileQuery.isLoading,
+    error: formError || (currentFileQuery.isError ? "Impossible de récupérer le fichier." : null),
+    setError: setFormError
   };
 }

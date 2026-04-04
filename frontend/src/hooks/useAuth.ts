@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { apiSignIn, apiSignUp } from "@/api/auth";
 import { usePageHeader } from "./usePageHeader";
 import { RegisterSchema, SignInSchema } from "@/modules/auth.schemas";
+import { useMutation } from "@tanstack/react-query";
 
 type AppSession = {
   user: {
@@ -34,91 +35,118 @@ export function useAuth() {
   const [passwordR, setPasswordR] = useState("");
   const [passwordConfirmR, setPasswordConfirmR] = useState("");
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
-  async function signIn(e: React.SyntheticEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
+  const signInMutation = useMutation({
+    mutationFn: async ({ email, password }: { email: string; password: string }) => {
+      const formData = {
+        email,
+        password
+      };
 
-    const formData = {
-      email: emailSI,
-      password: passwordSI
-    };
+      const result = SignInSchema.safeParse(formData);
 
-    const result = SignInSchema.safeParse(formData);
+      if (!result.success) {
+        const firstIssue = result.error.issues[0];
+        throw new Error(firstIssue?.message ?? "Formulaire invalide.");
+      }
 
-    if (!result.success) {
-      const firstIssue = result.error.issues[0];
-      setError(firstIssue?.message ?? "Formulaire invalide.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const data = await apiSignIn(result.data.email, result.data.password);
-
+      return apiSignIn(result.data.email, result.data.password);
+    },
+    onSuccess: (data) => {
       localStorage.setItem(
         "session",
         JSON.stringify({
-          user: { email: data.user.email, name: data.user.name, id: data.user.id },
-          createdAt: data.user.createdAt
+          user: {
+            email: data.user.email,
+            name: data.user.name,
+            id: data.user.id
+          },
+          createdAt: data.user.createdAt,
+          theme
         } as AppSession)
       );
 
       localStorage.setItem("theme", theme);
-
       navigate("/dashboard", { replace: true });
-    } catch (error) {
-      console.error("[useAuth.onSignIn failed]", error);
-      setError("Impossible de se connecter.");
-    } finally {
-      setLoading(false);
+    },
+    onError: (error) => {
+      console.error("[useAuth.signIn] failed", error);
+      setFormError(error instanceof Error ? error.message : "Impossible de se connecter.");
     }
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: async ({
+      email,
+      password,
+      passwordConfirm,
+      username
+    }: {
+      email: string;
+      password: string;
+      passwordConfirm: string;
+      username: string;
+    }) => {
+      const formData = {
+        email,
+        password,
+        passwordConfirm,
+        username
+      };
+
+      const result = RegisterSchema.safeParse(formData);
+
+      if (!result.success) {
+        const firstIssue = result.error.issues[0];
+        throw new Error(firstIssue?.message ?? "Formulaire invalide.");
+      }
+
+      return apiSignUp(result.data.email, result.data.password, result.data.username);
+    },
+    onSuccess: (data) => {
+      localStorage.setItem(
+        "session",
+        JSON.stringify({
+          user: {
+            email: data.user.email,
+            name: data.user.name,
+            id: data.user.id
+          },
+          createdAt: data.user.createdAt,
+          theme
+        } as AppSession)
+      );
+
+      localStorage.setItem("theme", theme);
+      navigate("/dashboard", { replace: true });
+    },
+    onError: (error) => {
+      console.error("[useAuth.register] failed", error);
+      setFormError(error instanceof Error ? error.message : "Impossible de s'inscrire.");
+    }
+  });
+
+  async function signIn(e: React.SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormError(null);
+
+    await signInMutation.mutateAsync({
+      email: emailSI,
+      password: passwordSI
+    });
   }
 
   async function register(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+    setFormError(null);
 
-    const formData = {
+    await registerMutation.mutateAsync({
       email: emailR,
       password: passwordR,
       passwordConfirm: passwordConfirmR,
       username: usernameR
-    }
-
-    const result = RegisterSchema.safeParse(formData);
-
-    if (!result.success) {
-      const firstIssue = result.error.issues[0];
-      setError(firstIssue?.message ?? "Formulaire invalide.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const data = await apiSignUp(result.data.email, result.data.password, result.data.username);
-
-      localStorage.setItem(
-        "session",
-        JSON.stringify({
-          user: { email: data.user.email, name: data.user.name, id: data.user.id },
-          createdAt: data.user.createdAt
-        } as AppSession)
-      );
-
-      localStorage.setItem("theme", theme);
-
-      navigate("/dashboard", { replace: true });
-    } catch (error) {
-      console.error("[useAuth.onRegister failed]", error);
-      setError("Impossible de s'inscrire.");
-    } finally {
-      setLoading(false);
-    }
+    });
   }
 
   useEffect(() => {
@@ -126,14 +154,20 @@ export function useAuth() {
       localStorage.setItem(
         "session",
         JSON.stringify({
-          user: { email: session.user.email, name: session.user.name, id: session.user.id },
+          user: {
+            email: session.user.email,
+            name: session.user.name,
+            id: session.user.id
+          },
           expiresAt: session.session.expiresAt,
           createdAt: session.user.createdAt,
-          theme: theme
+          theme
         } as AppSession)
       );
+
       navigate("/dashboard", { replace: true });
     }
+
     localStorage.setItem("theme", theme);
   }, [session, navigate, theme]);
 
@@ -152,9 +186,9 @@ export function useAuth() {
     setPasswordR,
     passwordConfirmR,
     setPasswordConfirmR,
-    loading,
-    error,
-    setError,
+    loading: signInMutation.isPending || registerMutation.isPending,
+    error: formError,
+    setError: setFormError,
     signIn,
     register,
     theme
