@@ -1,5 +1,5 @@
 paths-ignore:
   - "backend/coverage/**"
-  - "frontend/coverage/**"
+  - "/coverage/**"
   - "**/node_modules/**"
   - "**/dist/**"
