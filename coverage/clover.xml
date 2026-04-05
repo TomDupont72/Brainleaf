@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1775347643082" clover="3.2.0">
+  <project timestamp="1775347643083" name="All files">
+    <metrics statements="128" coveredstatements="125" conditionals="61" coveredconditionals="49" methods="32" coveredmethods="32" elements="221" coveredelements="206" complexity="0" loc="128" ncloc="128" packages="2" files="6" classes="6"/>
+    <package name="hooks">
+      <metrics statements="121" coveredstatements="118" conditionals="61" coveredconditionals="49" methods="31" coveredmethods="31"/>
+      <file name="useAuth.ts" path="C:\Users\FlowUP\Desktop\Dev\brainleaf\frontend\src\hooks\useAuth.ts">
+        <metrics statements="47" coveredstatements="45" conditionals="16" coveredconditionals="10" methods="10" coveredmethods="10"/>
+        <line num="22" count="17" type="stmt"/>
+        <line num="24" count="17" type="stmt"/>
+        <line num="26" count="17" type="stmt"/>
+        <line num="28" count="17" type="stmt"/>
+        <line num="30" count="17" type="stmt"/>
+        <line num="31" count="17" type="stmt"/>
+        <line num="33" count="17" type="stmt"/>
+        <line num="34" count="17" type="stmt"/>
+        <line num="35" count="17" type="stmt"/>
+        <line num="36" count="17" type="stmt"/>
+        <line num="38" count="17" type="stmt"/>
+        <line num="40" count="17" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="49" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="51" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="79" count="17" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="98" count="2" type="stmt"/>
+        <line num="100" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="102" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="105" count="2" type="stmt"/>
+        <line num="108" count="1" type="stmt"/>
+        <line num="121" count="1" type="stmt"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="125" count="1" type="stmt"/>
+        <line num="126" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="131" count="2" type="stmt"/>
+        <line num="132" count="2" type="stmt"/>
+        <line num="134" count="2" type="stmt"/>
+        <line num="141" count="2" type="stmt"/>
+        <line num="142" count="2" type="stmt"/>
+        <line num="144" count="2" type="stmt"/>
+        <line num="152" count="17" type="stmt"/>
+        <line num="153" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="154" count="1" type="stmt"/>
+        <line num="168" count="1" type="stmt"/>
+        <line num="171" count="8" type="stmt"/>
+        <line num="174" count="17" type="stmt"/>
+      </file>
+      <file name="useDashboard.ts" path="C:\Users\FlowUP\Desktop\Dev\brainleaf\frontend\src\hooks\useDashboard.ts">
+        <metrics statements="52" coveredstatements="52" conditionals="27" coveredconditionals="21" methods="14" coveredmethods="14"/>
+        <line num="16" count="13" type="stmt"/>
+        <line num="17" count="13" type="stmt"/>
+        <line num="19" count="13" type="stmt"/>
+        <line num="21" count="13" type="stmt"/>
+        <line num="22" count="13" type="stmt"/>
+        <line num="23" count="13" type="stmt"/>
+        <line num="25" count="13" type="stmt"/>
+        <line num="27" count="13" type="cond" truecount="1" falsecount="1"/>
+        <line num="28" count="13" type="cond" truecount="3" falsecount="1"/>
+        <line num="30" count="13" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="34" count="13" type="stmt"/>
+        <line num="37" count="9" type="stmt"/>
+        <line num="38" count="9" type="stmt"/>
+        <line num="40" count="35" type="stmt"/>
+        <line num="43" count="13" type="stmt"/>
+        <line num="46" count="8" type="stmt"/>
+        <line num="50" count="13" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="59" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="72" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="81" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="85" count="13" type="stmt"/>
+        <line num="87" count="2" type="stmt"/>
+        <line num="90" count="1" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
+        <line num="94" count="1" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
+        <line num="99" count="13" type="stmt"/>
+        <line num="100" count="2" type="stmt"/>
+        <line num="101" count="2" type="stmt"/>
+        <line num="104" count="13" type="stmt"/>
+        <line num="105" count="2" type="stmt"/>
+        <line num="106" count="2" type="stmt"/>
+        <line num="109" count="13" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="113" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="114" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="115" count="13" type="cond" truecount="1" falsecount="1"/>
+        <line num="117" count="13" type="stmt"/>
+      </file>
+      <file name="useFile.ts" path="C:\Users\FlowUP\Desktop\Dev\brainleaf\frontend\src\hooks\useFile.ts">
+        <metrics statements="8" coveredstatements="8" conditionals="10" coveredconditionals="10" methods="3" coveredmethods="3"/>
+        <line num="35" count="7" type="stmt"/>
+        <line num="37" count="7" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="44" count="19" type="stmt"/>
+        <line num="45" count="19" type="cond" truecount="4" falsecount="0"/>
+        <line num="49" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="51" count="7" type="stmt"/>
+      </file>
+      <file name="usePageHeader.ts" path="C:\Users\FlowUP\Desktop\Dev\brainleaf\frontend\src\hooks\usePageHeader.ts">
+        <metrics statements="14" coveredstatements="13" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4"/>
+        <line num="5" count="5" type="stmt"/>
+        <line num="7" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="10" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="24" count="5" type="stmt"/>
+        <line num="25" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="30" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="modules">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="auth.schemas.ts" path="C:\Users\FlowUP\Desktop\Dev\brainleaf\frontend\src\modules\auth.schemas.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="15" count="2" type="stmt"/>
+        <line num="20" count="5" type="stmt"/>
+      </file>
+      <file name="files.schemas.ts" path="C:\Users\FlowUP\Desktop\Dev\brainleaf\frontend\src\modules\files.schemas.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

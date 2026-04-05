@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1775349367077" clover="3.2.0">
+  <project timestamp="1775349367077" name="All files">
+    <metrics statements="50" coveredstatements="50" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4" elements="62" coveredelements="62" complexity="0" loc="50" ncloc="50" packages="2" files="2" classes="2"/>
+    <package name="modules">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="files.schemas.ts" path="C:\Users\FlowUP\Desktop\Dev\brainleaf\backend\src\modules\files.schemas.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="services">
+      <metrics statements="43" coveredstatements="43" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4"/>
+      <file name="files.service.ts" path="C:\Users\FlowUP\Desktop\Dev\brainleaf\backend\src\services\files.service.ts">
+        <metrics statements="43" coveredstatements="43" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="26" count="4" type="stmt"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="30" count="4" type="stmt"/>
+        <line num="31" count="4" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="40" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="50" count="3" type="stmt"/>
+        <line num="60" count="5" type="stmt"/>
+        <line num="62" count="5" type="stmt"/>
+        <line num="63" count="5" type="stmt"/>
+        <line num="65" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="71" count="4" type="stmt"/>
+        <line num="72" count="3" type="stmt"/>
+        <line num="74" count="3" type="stmt"/>
+        <line num="76" count="3" type="stmt"/>
+        <line num="78" count="3" type="stmt"/>
+        <line num="79" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="80" count="2" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="88" count="3" type="stmt"/>
+        <line num="93" count="2" type="stmt"/>
+        <line num="95" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="102" count="1" type="stmt"/>
+        <line num="104" count="1" type="stmt"/>
+        <line num="115" count="3" type="stmt"/>
+        <line num="116" count="3" type="stmt"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="119" count="1" type="stmt"/>
+        <line num="121" count="1" type="stmt"/>
+        <line num="123" count="2" type="stmt"/>
+        <line num="124" count="2" type="stmt"/>
+        <line num="126" count="1" type="stmt"/>
+        <line num="130" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

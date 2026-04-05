@@ -19,5 +19,5 @@ export const RegisterSchema = AuthSchema.pick({
   passwordConfirm: true
 }).refine((data) => data.password === data.passwordConfirm, {
   message: "Les mots de passe ne correspondent pas.",
-  path: ["confirmPassword"]
+  path: ["passwordConfirm"]
 });
