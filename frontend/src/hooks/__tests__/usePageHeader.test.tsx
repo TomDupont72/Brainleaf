@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { usePageHeader } from "../usePageHeader";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "../../lib/auth-client";
 
 const navigateMock = vi.fn();
 

@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import { useDashboard } from "../useDashboard";
 
-import * as filesApi from "@/api/files";
+import * as filesApi from "../../api/files";
 
 const navigateMock = vi.fn();
 

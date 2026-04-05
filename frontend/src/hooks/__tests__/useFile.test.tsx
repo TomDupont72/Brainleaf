@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFile } from "../useFile";
-import * as filesApi from "@/api/files";
+import * as filesApi from "../../api/files";
 
 vi.mock("@/api/files", () => ({
   apiFileFilesByKey: vi.fn()

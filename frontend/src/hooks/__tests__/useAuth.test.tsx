@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuth } from "../useAuth";
-import * as authApi from "@/api/auth";
-import { authClient } from "@/lib/auth-client";
+import * as authApi from "../../api/auth";
+import { authClient } from "../../lib/auth-client";
 import * as pageHeaderHook from "../usePageHeader";
 
 const navigateMock = vi.fn();
