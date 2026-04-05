@@ -29,6 +29,7 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
+          config-file: ./.github/codeql/codeql-config.yml
 
       # Pour JS/TS, CodeQL fonctionne mieux si tu builds.
       - name: Setup Node

@@ -73,7 +73,7 @@ export async function deleteUserFile(
 
     deletedFromB2 = true;
 
-    return deleteFile(file.id);
+    return await deleteFile(file.id);
   } catch (error) {
     try {
       if (deletedFromB2) {
