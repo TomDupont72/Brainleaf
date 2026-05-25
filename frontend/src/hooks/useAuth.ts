@@ -6,18 +6,6 @@ import { usePageHeader } from "./usePageHeader";
 import { RegisterSchema, SignInSchema } from "@/modules/auth.schemas";
 import { useMutation } from "@tanstack/react-query";
 
-type AppSession = {
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  };
-  token: string;
-  createdAt: Date;
-  expiresAt?: Date;
-  theme: "dark" | "light";
-};
-
 export function useAuth() {
   const navigate = useNavigate();
 
@@ -53,20 +41,7 @@ export function useAuth() {
 
       return apiSignIn(result.data.email, result.data.password);
     },
-    onSuccess: (data) => {
-      localStorage.setItem(
-        "session",
-        JSON.stringify({
-          user: {
-            email: data.user.email,
-            name: data.user.name,
-            id: data.user.id
-          },
-          createdAt: data.user.createdAt,
-          theme
-        } as AppSession)
-      );
-
+    onSuccess: () => {
       localStorage.setItem("theme", theme);
       navigate("/dashboard", { replace: true });
     },
@@ -104,20 +79,7 @@ export function useAuth() {
 
       return apiSignUp(result.data.email, result.data.password, result.data.username);
     },
-    onSuccess: (data) => {
-      localStorage.setItem(
-        "session",
-        JSON.stringify({
-          user: {
-            email: data.user.email,
-            name: data.user.name,
-            id: data.user.id
-          },
-          createdAt: data.user.createdAt,
-          theme
-        } as AppSession)
-      );
-
+    onSuccess: () => {
       localStorage.setItem("theme", theme);
       navigate("/dashboard", { replace: true });
     },
@@ -151,21 +113,9 @@ export function useAuth() {
 
   useEffect(() => {
     if (session) {
-      localStorage.setItem(
-        "session",
-        JSON.stringify({
-          user: {
-            email: session.user.email,
-            name: session.user.name,
-            id: session.user.id
-          },
-          expiresAt: session.session.expiresAt,
-          createdAt: session.user.createdAt,
-          theme
-        } as AppSession)
-      );
-
       navigate("/dashboard", { replace: true });
+    } else {
+      navigate("/auth", { replace: true });
     }
 
     localStorage.setItem("theme", theme);

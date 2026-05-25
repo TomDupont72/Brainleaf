@@ -122,13 +122,7 @@ describe("useAuth", () => {
 
     expect(fakeEvent.preventDefault).toHaveBeenCalled();
 
-    const storedSession = JSON.parse(localStorage.getItem("session") || "null");
-    expect(storedSession).not.toBeNull();
-    expect(storedSession.user.email).toBe("john@example.com");
-    expect(storedSession.user.name).toBe("John");
-    expect(storedSession.user.id).toBe("1");
-    expect(storedSession.theme).toBe("dark");
-
+    expect(localStorage.getItem("session")).toBeNull();
     expect(localStorage.getItem("theme")).toBe("dark");
     expect(navigateMock).toHaveBeenCalledWith("/dashboard", { replace: true });
     expect(result.current.error).toBeNull();
@@ -154,7 +148,7 @@ describe("useAuth", () => {
 
     expect(fakeEvent.preventDefault).toHaveBeenCalled();
     expect(authApi.apiSignIn).not.toHaveBeenCalled();
-    expect(navigateMock).not.toHaveBeenCalled();
+    expect(navigateMock).not.toHaveBeenCalledWith("/dashboard", { replace: true });
 
     await waitFor(() => {
       expect(result.current.error).not.toBeNull();
@@ -189,13 +183,7 @@ describe("useAuth", () => {
 
     expect(fakeEvent.preventDefault).toHaveBeenCalled();
 
-    const storedSession = JSON.parse(localStorage.getItem("session") || "null");
-    expect(storedSession).not.toBeNull();
-    expect(storedSession.user.email).toBe("john@example.com");
-    expect(storedSession.user.name).toBe("John");
-    expect(storedSession.user.id).toBe("1");
-    expect(storedSession.theme).toBe("dark");
-
+    expect(localStorage.getItem("session")).toBeNull();
     expect(localStorage.getItem("theme")).toBe("dark");
     expect(navigateMock).toHaveBeenCalledWith("/dashboard", { replace: true });
     expect(result.current.error).toBeNull();
@@ -271,12 +259,7 @@ describe("useAuth", () => {
       expect(navigateMock).toHaveBeenCalledWith("/dashboard", { replace: true });
     });
 
-    const storedSession = JSON.parse(localStorage.getItem("session") || "null");
-    expect(storedSession).not.toBeNull();
-    expect(storedSession.user.email).toBe("session@example.com");
-    expect(storedSession.user.name).toBe("SessionUser");
-    expect(storedSession.user.id).toBe("99");
-    expect(storedSession.theme).toBe("dark");
+    expect(localStorage.getItem("session")).toBeNull();
     expect(localStorage.getItem("theme")).toBe("dark");
   });
 
@@ -288,7 +271,7 @@ describe("useAuth", () => {
     });
 
     expect(localStorage.getItem("session")).toBeNull();
-    expect(navigateMock).not.toHaveBeenCalled();
+    expect(navigateMock).toHaveBeenCalledWith("/auth", { replace: true });
   });
 
   it("permet de changer le mode log", () => {

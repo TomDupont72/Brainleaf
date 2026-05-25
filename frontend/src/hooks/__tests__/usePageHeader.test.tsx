@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { usePageHeader } from "../usePageHeader";
 import { authClient } from "../../lib/auth-client";
@@ -15,32 +15,36 @@ vi.mock("react-router-dom", async () => {
 
 vi.mock("@/lib/auth-client", () => ({
   authClient: {
+    useSession: vi.fn(),
     signOut: vi.fn()
   }
 }));
+
+const authSession = {
+  user: {
+    id: "1",
+    email: "john@example.com",
+    name: "John"
+  },
+  session: {
+    id: "session-1",
+    userId: "1",
+    expiresAt: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    token: "token"
+  }
+};
 
 describe("usePageHeader", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
-    vi.useFakeTimers();
+    vi.mocked(authClient.useSession).mockReturnValue({ data: null } as ReturnType<typeof authClient.useSession>);
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  it("retourne username et theme depuis le localStorage", () => {
-    localStorage.setItem(
-      "session",
-      JSON.stringify({
-        user: {
-          id: "1",
-          email: "john@example.com",
-          name: "John"
-        }
-      })
-    );
+  it("retourne username depuis la session et theme depuis le localStorage", () => {
+    vi.mocked(authClient.useSession).mockReturnValue({ data: authSession } as ReturnType<typeof authClient.useSession>);
     localStorage.setItem("theme", "light");
 
     const { result } = renderHook(() => usePageHeader());
@@ -49,26 +53,15 @@ describe("usePageHeader", () => {
     expect(result.current.theme).toBe("light");
   });
 
-  it("retourne des valeurs par défaut si le localStorage est vide", () => {
+  it("retourne des valeurs par defaut sans session ni theme", () => {
     const { result } = renderHook(() => usePageHeader());
 
     expect(result.current.username).toBe("");
     expect(result.current.theme).toBe("dark");
   });
 
-  it("logout déconnecte, supprime la session et navigue vers auth", async () => {
+  it("logout deconnecte et navigue vers auth", async () => {
     vi.mocked(authClient.signOut).mockResolvedValue(undefined);
-
-    localStorage.setItem(
-      "session",
-      JSON.stringify({
-        user: {
-          id: "1",
-          email: "john@example.com",
-          name: "John"
-        }
-      })
-    );
 
     const { result } = renderHook(() => usePageHeader());
 
@@ -77,26 +70,11 @@ describe("usePageHeader", () => {
     });
 
     expect(authClient.signOut).toHaveBeenCalledTimes(1);
-    expect(localStorage.getItem("session")).toBeNull();
-
-    act(() => {
-      vi.advanceTimersByTime(100);
-    });
-
     expect(navigateMock).toHaveBeenCalledWith("/auth", { replace: true });
   });
 
   it("navigateToDashboard navigue vers dashboard si une session existe", () => {
-    localStorage.setItem(
-      "session",
-      JSON.stringify({
-        user: {
-          id: "1",
-          email: "john@example.com",
-          name: "John"
-        }
-      })
-    );
+    vi.mocked(authClient.useSession).mockReturnValue({ data: authSession } as ReturnType<typeof authClient.useSession>);
 
     const { result } = renderHook(() => usePageHeader());
 
