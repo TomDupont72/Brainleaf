@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-export const BUILD = "1.4.9";
+export const BUILD = "1.4.10";
 
 const stored = localStorage.getItem("brainleaf_build");
 
