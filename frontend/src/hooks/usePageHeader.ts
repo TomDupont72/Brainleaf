@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export function usePageHeader() {
   const navigate = useNavigate();
-
-  const session = JSON.parse(localStorage.getItem("session") || "null");
+  const { data: session } = authClient.useSession();
 
   const username = session?.user?.name ?? "";
   const theme = localStorage.getItem("theme") ?? "dark";
@@ -12,10 +11,7 @@ export function usePageHeader() {
   async function logout() {
     try {
       await authClient.signOut();
-      localStorage.removeItem("session");
-      setTimeout(() => {
-        navigate("/auth", { replace: true });
-      }, 100);
+      navigate("/auth", { replace: true });
     } catch (error) {
       console.error("[Dashboard.onLogout failed]", error);
     }
