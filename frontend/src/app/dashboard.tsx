@@ -17,6 +17,7 @@ import { Trash2, Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import ErrorAlert from "@/components/errorAlert";
 import Paginator from "@/components/paginator";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const {
@@ -35,6 +36,7 @@ export default function Dashboard() {
     setCurrentPage
   } = useDashboard();
   const { username, logout, theme } = usePageHeader();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -145,6 +147,18 @@ export default function Dashboard() {
               />
             </div>
           </div>
+          <Button
+            className="fixed left-8 bottom-8"
+            variant="link"
+            onClick={() => {
+              navigate("/legal", { replace: true });
+              setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: "instant" });
+              }, 0);
+            }}
+          >
+            Mentions légales et confidentialité
+          </Button>
 
           <UploadDialog
             file={file}
