@@ -11,6 +11,7 @@ import { Sun, Moon, BrainCircuit } from "lucide-react";
 
 import { BUILD } from "../../main";
 import { usePageHeader } from "@/hooks/usePageHeader";
+import { useNavigate } from "react-router-dom";
 
 type PageHeaderProps = {
   title: string;
@@ -31,6 +32,7 @@ export default function PageHeader({
 }: PageHeaderProps) {
   const [dark, setDark] = useState(theme === "dark");
   const { navigateToDashboard } = usePageHeader();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -59,6 +61,16 @@ export default function PageHeader({
               <DropdownMenuItem>Profil</DropdownMenuItem>
               <DropdownMenuItem>Paramètres</DropdownMenuItem>
               <DropdownMenuItem onClick={onLogout}>Déconnexion</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigate("/legal", { replace: true });
+                  setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: "instant" });
+                  }, 0);
+                }}
+              >
+                Mentions légales et confidentialité
+              </DropdownMenuItem>
               <DropdownMenuItem className="text-md text-muted-foreground text-sm">
                 v{BUILD}
               </DropdownMenuItem>
