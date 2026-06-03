@@ -17,7 +17,6 @@ import { Trash2, Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import ErrorAlert from "@/components/errorAlert";
 import Paginator from "@/components/paginator";
-import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const {
@@ -36,7 +35,6 @@ export default function Dashboard() {
     setCurrentPage
   } = useDashboard();
   const { username, logout, theme } = usePageHeader();
-  const navigate = useNavigate();
 
   if (loading) {
     return (
