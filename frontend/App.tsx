@@ -4,6 +4,7 @@ import Auth from "./src/app/auth";
 import Dashboard from "./src/app/dashboard";
 import File from "./src/app/file";
 import { authClient } from "./src/lib/auth-client";
+import Legal from "@/app/legal";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { data: session, isPending } = authClient.useSession();
@@ -24,9 +25,38 @@ function GuestRoute({ children }: { children: ReactNode }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/auth" element={<GuestRoute><Auth /></GuestRoute>} />
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/file/:fileKey" element={<ProtectedRoute><File /></ProtectedRoute>} />
+      <Route
+        path="/auth"
+        element={
+          <GuestRoute>
+            <Auth />
+          </GuestRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/file/:fileKey"
+        element={
+          <ProtectedRoute>
+            <File />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/legal"
+        element={
+          <ProtectedRoute>
+            <Legal />
+          </ProtectedRoute>
+        }
+      />
       <Route path="*" element={<Navigate to="/auth" />} />
     </Routes>
   );
