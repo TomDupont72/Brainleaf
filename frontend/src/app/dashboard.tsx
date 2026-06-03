@@ -90,7 +90,7 @@ export default function Dashboard() {
         <>
           <div className="flex-1 overflow-y-auto min-h-0">
             <div className="flex flex-col min-h-full">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 my-5 px-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 my-3 px-8">
                 {files.map((file) => (
                   <motion.div key={file.id} initial={{ scale: 1 }} whileHover={{ scale: 1.05 }}>
                     <Card className="relative">
@@ -122,7 +122,7 @@ export default function Dashboard() {
                           </div>
                         </DialogContent>
                       </Dialog>
-                      <div className="flex flex-col items-center justify-center gap-4 px-14">
+                      <div className="flex flex-col items-center justify-center gap-2 px-14">
                         <div className="flex flex-col justify-center h-[calc(2*1lh)]">
                           <h3
                             key={file.id}
@@ -147,18 +147,6 @@ export default function Dashboard() {
               />
             </div>
           </div>
-          <Button
-            className="fixed left-8 bottom-8"
-            variant="link"
-            onClick={() => {
-              navigate("/legal", { replace: true });
-              setTimeout(() => {
-                window.scrollTo({ top: 0, behavior: "instant" });
-              }, 0);
-            }}
-          >
-            Mentions légales et confidentialité
-          </Button>
 
           <UploadDialog
             file={file}
