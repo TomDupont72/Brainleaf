@@ -63,7 +63,7 @@ export default function PageHeader({
               <DropdownMenuItem onClick={onLogout}>Déconnexion</DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  navigate("/legal", { replace: true });
+                  navigate("/legal");
                   setTimeout(() => {
                     window.scrollTo({ top: 0, behavior: "instant" });
                   }, 0);
