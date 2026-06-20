@@ -74,9 +74,7 @@ describe("RegisterSchema", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "Le nom d'utilisateur ne doit pas être vide."
-      );
+      expect(result.error.issues[0]?.message).toBe("Le nom d'utilisateur ne doit pas être vide.");
     }
   });
 
@@ -91,9 +89,7 @@ describe("RegisterSchema", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "Les mots de passe ne correspondent pas."
-      );
+      expect(result.error.issues[0]?.message).toBe("Les mots de passe ne correspondent pas.");
     }
   });
 });

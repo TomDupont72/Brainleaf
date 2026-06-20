@@ -33,9 +33,7 @@ describe("UploadFileSchema", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "Le nom du fichier ne doit pas être vide."
-      );
+      expect(result.error.issues[0]?.message).toBe("Le nom du fichier ne doit pas être vide.");
     }
   });
 
@@ -50,9 +48,7 @@ describe("UploadFileSchema", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "Le nom du fichier est trop long."
-      );
+      expect(result.error.issues[0]?.message).toBe("Le nom du fichier est trop long.");
     }
   });
 

@@ -51,18 +51,14 @@ describe("useFile", () => {
   });
 
   function wrapper({ children }: { children: React.ReactNode }) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        {children}
-      </QueryClientProvider>
-    );
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   }
 
   it("retourne le fichier quand la query réussit", async () => {
     const { result } = renderHook(() => useFile("abc123"), { wrapper });
 
     await waitFor(() => {
-        expect(result.current.loading).toBe(false);
+      expect(result.current.loading).toBe(false);
     });
 
     expect(filesApi.apiFileFilesByKey).toHaveBeenCalledWith("abc123");

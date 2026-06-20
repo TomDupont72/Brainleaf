@@ -50,45 +50,45 @@ describe("useAuth", () => {
     });
 
     vi.mocked(pageHeaderHook.usePageHeader).mockReturnValue({
-        theme: "dark",
-        username: "",
-        logout: vi.fn().mockResolvedValue(undefined),
-        navigateToDashboard: vi.fn()
+      theme: "dark",
+      username: "",
+      logout: vi.fn().mockResolvedValue(undefined),
+      navigateToDashboard: vi.fn()
     });
 
     vi.mocked(authClient.useSession).mockReturnValue({
-        data: null,
-        isPending: false,
-        isRefetching: false,
-        error: null,
-        refetch: vi.fn()
+      data: null,
+      isPending: false,
+      isRefetching: false,
+      error: null,
+      refetch: vi.fn()
     });
 
     vi.mocked(authApi.apiSignIn).mockResolvedValue({
-        token: "fake-token",
-        redirect: false,
-        user: {
-            id: "1",
-            email: "john@example.com",
-            name: "John",
-            createdAt: new Date("2026-01-01"),
-            updatedAt: new Date("2026-01-01"),
-            emailVerified: false,
-            image: null
-        }
+      token: "fake-token",
+      redirect: false,
+      user: {
+        id: "1",
+        email: "john@example.com",
+        name: "John",
+        createdAt: new Date("2026-01-01"),
+        updatedAt: new Date("2026-01-01"),
+        emailVerified: false,
+        image: null
+      }
     });
 
     vi.mocked(authApi.apiSignUp).mockResolvedValue({
       token: "fake-token",
-        user: {
-            id: "1",
-            email: "john@example.com",
-            name: "John",
-            createdAt: new Date("2026-01-01"),
-            updatedAt: new Date("2026-01-01"),
-            emailVerified: false,
-            image: null
-        }
+      user: {
+        id: "1",
+        email: "john@example.com",
+        name: "John",
+        createdAt: new Date("2026-01-01"),
+        updatedAt: new Date("2026-01-01"),
+        emailVerified: false,
+        image: null
+      }
     });
   });
 
@@ -174,11 +174,7 @@ describe("useAuth", () => {
     });
 
     await waitFor(() => {
-      expect(authApi.apiSignUp).toHaveBeenCalledWith(
-        "new@example.com",
-        "password123",
-        "NewUser"
-      );
+      expect(authApi.apiSignUp).toHaveBeenCalledWith("new@example.com", "password123", "NewUser");
     });
 
     expect(fakeEvent.preventDefault).toHaveBeenCalled();
@@ -211,11 +207,7 @@ describe("useAuth", () => {
       })
     ).rejects.toThrow();
 
-    expect(authApi.apiSignUp).toHaveBeenCalledWith(
-      "new@example.com",
-      "password123",
-      "NewUser"
-    );
+    expect(authApi.apiSignUp).toHaveBeenCalledWith("new@example.com", "password123", "NewUser");
 
     await waitFor(() => {
       expect(result.current.error).toBe("Email déjà utilisé");
@@ -226,31 +218,31 @@ describe("useAuth", () => {
 
   it("stocke la session existante et navigue vers dashboard si une session est déjà présente", async () => {
     vi.mocked(authClient.useSession).mockReturnValue({
-        data: {
-            user: {
-            id: "99",
-            email: "session@example.com",
-            name: "SessionUser",
-            createdAt: new Date("2026-01-03"),
-            updatedAt: new Date("2026-01-03"),
-            emailVerified: false,
-            image: null
-            },
-            session: {
-            id: "session-1",
-            userId: "99",
-            createdAt: new Date("2026-01-03"),
-            updatedAt: new Date("2026-01-03"),
-            expiresAt: new Date("2026-12-31"),
-            token: "fake-token",
-            ipAddress: null,
-            userAgent: null
-            }
+      data: {
+        user: {
+          id: "99",
+          email: "session@example.com",
+          name: "SessionUser",
+          createdAt: new Date("2026-01-03"),
+          updatedAt: new Date("2026-01-03"),
+          emailVerified: false,
+          image: null
         },
-        isPending: false,
-        isRefetching: false,
-        error: null,
-        refetch: vi.fn()
+        session: {
+          id: "session-1",
+          userId: "99",
+          createdAt: new Date("2026-01-03"),
+          updatedAt: new Date("2026-01-03"),
+          expiresAt: new Date("2026-12-31"),
+          token: "fake-token",
+          ipAddress: null,
+          userAgent: null
+        }
+      },
+      isPending: false,
+      isRefetching: false,
+      error: null,
+      refetch: vi.fn()
     });
 
     renderHook(() => useAuth(), { wrapper });
