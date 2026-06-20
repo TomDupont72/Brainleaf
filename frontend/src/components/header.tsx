@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { Sun, Moon, BrainCircuit } from "lucide-react";
 
-import { BUILD } from "../../main";
+import { BUILD } from "../main";
 import { usePageHeader } from "@/hooks/usePageHeader";
 import { useNavigate } from "react-router-dom";
 
