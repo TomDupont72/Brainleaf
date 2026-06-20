@@ -5,16 +5,19 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-COPY tsconfig.json ./
-COPY src ./src
+COPY . .
 
 RUN npm run build
-RUN npm prune --omit=dev
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+FROM node:20-alpine
 
-USER appuser
+WORKDIR /app
 
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD node -e "process.exit(0)"
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 8000
 
 CMD ["node", "dist/index.js"]
