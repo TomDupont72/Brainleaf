@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import type { ReactNode } from "react";
-import Auth from "./src/app/auth";
-import Dashboard from "./src/app/dashboard";
-import File from "./src/app/file";
-import { authClient } from "./src/lib/auth-client";
-import Legal from "@/app/legal";
+import Auth from "./app/auth";
+import Dashboard from "./app/dashboard";
+import File from "./app/file";
+import { authClient } from "./lib/auth-client";
+import Legal from "./app/legal";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { data: session, isPending } = authClient.useSession();

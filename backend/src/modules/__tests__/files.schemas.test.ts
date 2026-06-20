@@ -42,9 +42,7 @@ describe("FileUploadSchema", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "Le nom du fichier ne doit pas être vide."
-      );
+      expect(result.error.issues[0]?.message).toBe("Le nom du fichier ne doit pas être vide.");
     }
   });
 
@@ -58,9 +56,7 @@ describe("FileUploadSchema", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "Le nom du fichier est trop long."
-      );
+      expect(result.error.issues[0]?.message).toBe("Le nom du fichier est trop long.");
     }
   });
 
@@ -221,9 +217,7 @@ describe("FileInsertWorkerResult", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "Le résumé ne doit pas être vide."
-      );
+      expect(result.error.issues[0]?.message).toBe("Le résumé ne doit pas être vide.");
     }
   });
 
@@ -244,9 +238,7 @@ describe("FileInsertWorkerResult", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "La fiche de révision ne doit pas être vide."
-      );
+      expect(result.error.issues[0]?.message).toBe("La fiche de révision ne doit pas être vide.");
     }
   });
 
@@ -262,9 +254,7 @@ describe("FileInsertWorkerResult", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "Il doit y avoir au moins une question."
-      );
+      expect(result.error.issues[0]?.message).toBe("Il doit y avoir au moins une question.");
     }
   });
 
@@ -285,9 +275,7 @@ describe("FileInsertWorkerResult", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "La question ne doit pas être vide."
-      );
+      expect(result.error.issues[0]?.message).toBe("La question ne doit pas être vide.");
     }
   });
 
@@ -308,9 +296,7 @@ describe("FileInsertWorkerResult", () => {
     expect(result.success).toBe(false);
 
     if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe(
-        "La réponse ne doit pas être vide."
-      );
+      expect(result.error.issues[0]?.message).toBe("La réponse ne doit pas être vide.");
     }
   });
 });

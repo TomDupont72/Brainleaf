@@ -6,12 +6,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./frontend/src")
+      "@": path.resolve(__dirname, "./src")
     }
   },
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: "./frontend/src/lib/tests.ts",
-  },
+    setupFiles: "./src/lib/tests.ts"
+  }
 });

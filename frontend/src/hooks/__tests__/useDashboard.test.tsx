@@ -54,9 +54,7 @@ describe("useDashboard", () => {
   function wrapper({ children }: { children: React.ReactNode }) {
     return (
       <MemoryRouter initialEntries={["/dashboard?page=1"]}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       </MemoryRouter>
     );
   }
@@ -155,9 +153,7 @@ describe("useDashboard", () => {
   });
 
   it("retourne une erreur si la suppression échoue", async () => {
-    vi.mocked(filesApi.apiFileDelete).mockRejectedValue(
-      new Error("Delete failed")
-    );
+    vi.mocked(filesApi.apiFileDelete).mockRejectedValue(new Error("Delete failed"));
 
     const { result } = renderHook(() => useDashboard(), { wrapper });
 

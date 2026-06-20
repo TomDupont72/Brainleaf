@@ -39,6 +39,7 @@ jobs:
           npm audit --audit-level=high
 
       - name: Audit frontend
+        working-directory: frontend
         run: |
           npm ci
           npm audit --audit-level=high
@@ -81,6 +82,7 @@ jobs:
           node-version: 20
 
       - name: Install frontend dependencies
+        working-directory: frontend
         run: |
           npm ci
 
@@ -90,7 +92,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: test
-          args: --severity-threshold=high --file=package.json
+          args: --severity-threshold=high --file=frontend/package.json
 
   snyk-worker:
     name: Snyk worker

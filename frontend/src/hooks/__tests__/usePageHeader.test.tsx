@@ -40,11 +40,15 @@ describe("usePageHeader", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
-    vi.mocked(authClient.useSession).mockReturnValue({ data: null } as ReturnType<typeof authClient.useSession>);
+    vi.mocked(authClient.useSession).mockReturnValue({ data: null } as ReturnType<
+      typeof authClient.useSession
+    >);
   });
 
   it("retourne username depuis la session et theme depuis le localStorage", () => {
-    vi.mocked(authClient.useSession).mockReturnValue({ data: authSession } as ReturnType<typeof authClient.useSession>);
+    vi.mocked(authClient.useSession).mockReturnValue({ data: authSession } as ReturnType<
+      typeof authClient.useSession
+    >);
     localStorage.setItem("theme", "light");
 
     const { result } = renderHook(() => usePageHeader());
@@ -74,7 +78,9 @@ describe("usePageHeader", () => {
   });
 
   it("navigateToDashboard navigue vers dashboard si une session existe", () => {
-    vi.mocked(authClient.useSession).mockReturnValue({ data: authSession } as ReturnType<typeof authClient.useSession>);
+    vi.mocked(authClient.useSession).mockReturnValue({ data: authSession } as ReturnType<
+      typeof authClient.useSession
+    >);
 
     const { result } = renderHook(() => usePageHeader());
 
