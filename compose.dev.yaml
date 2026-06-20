@@ -1,0 +1,28 @@
+services:
+  backend:
+    build: ./backend
+    container_name: brainleaf-backend
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NGINX_CONF: nginx.dev.conf
+    container_name: hekart-frontend
+    ports:
+      - "127.0.0.1:5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  worker:
+    build: ./worker
+    container_name: brainleaf-worker
+    env_file:
+      - ./worker/.env
+    restart: unless-stopped
