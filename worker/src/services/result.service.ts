@@ -7,7 +7,7 @@ type AiCourseResult = {
   }[];
 };
 
-const apiUrl = process.env.VITE_API_URL;
+const apiUrl = process.env.BACKEND_URL;
 
 function getHeaders(): HeadersInit {
   return {
