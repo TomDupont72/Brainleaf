@@ -7,7 +7,7 @@ on:
 
 jobs:
   frontend:
-    name: Frontend (lint/test/coverage/build)
+    name: Fronted (lint/test/coverage/build)
     runs-on: ubuntu-latest
     defaults:
       run:
