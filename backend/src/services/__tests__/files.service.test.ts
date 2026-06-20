@@ -77,11 +77,7 @@ describe("files.service", () => {
 
       const generatedKey = vi.mocked(filesDb.insertFile).mock.calls[0][2];
 
-      expect(filesDb.insertFileB2).toHaveBeenCalledWith(
-        generatedKey,
-        buffer,
-        "application/pdf"
-      );
+      expect(filesDb.insertFileB2).toHaveBeenCalledWith(generatedKey, buffer, "application/pdf");
       expect(filesDb.createNewProcessPdfJob).toHaveBeenCalledWith(42, generatedKey);
       expect(filesDb.updateFileStatus).toHaveBeenCalledWith(generatedKey, "processing");
 
@@ -208,9 +204,9 @@ describe("files.service", () => {
         status: "deleted"
       } as never);
 
-      await expect(
-        deleteUserFile("user-1", "file-key", requestMock, replyMock)
-      ).rejects.toThrow("DB delete failed");
+      await expect(deleteUserFile("user-1", "file-key", requestMock, replyMock)).rejects.toThrow(
+        "DB delete failed"
+      );
 
       expect(filesDb.updateFileStatus).toHaveBeenCalledWith("file-key", "deleted");
     });
@@ -225,9 +221,9 @@ describe("files.service", () => {
 
       vi.mocked(filesDb.getFileB2).mockRejectedValue(b2Error);
 
-      await expect(
-        deleteUserFile("user-1", "file-key", requestMock, replyMock)
-      ).rejects.toThrow("B2 lookup failed");
+      await expect(deleteUserFile("user-1", "file-key", requestMock, replyMock)).rejects.toThrow(
+        "B2 lookup failed"
+      );
 
       expect(filesDb.updateFileStatus).not.toHaveBeenCalled();
       expect(filesDb.deleteFileB2).not.toHaveBeenCalled();
@@ -248,9 +244,9 @@ describe("files.service", () => {
       vi.mocked(filesDb.deleteFile).mockRejectedValue(deleteError);
       vi.mocked(filesDb.updateFileStatus).mockRejectedValue(updateStatusError);
 
-      await expect(
-        deleteUserFile("user-1", "file-key", requestMock, replyMock)
-      ).rejects.toThrow("DB delete failed");
+      await expect(deleteUserFile("user-1", "file-key", requestMock, replyMock)).rejects.toThrow(
+        "DB delete failed"
+      );
 
       expect(requestMock.log.error).toHaveBeenCalledWith(
         { fileKey: "file-key", catchError: updateStatusError },
@@ -395,14 +391,7 @@ describe("files.service", () => {
         status: "error"
       } as never);
 
-      const result = await insertWorkerResult(
-        42,
-        "file-key",
-        "Résumé",
-        "Fiche",
-        [],
-        requestMock
-      );
+      const result = await insertWorkerResult(42, "file-key", "Résumé", "Fiche", [], requestMock);
 
       expect(filesDb.updateFileStatus).toHaveBeenCalledWith("file-key", "error");
       expect(result).toBeUndefined();
