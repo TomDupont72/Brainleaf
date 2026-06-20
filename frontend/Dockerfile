@@ -6,8 +6,12 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-
-RUN npm run build
+ARG VITE_API_URL
+RUN if [ -n "$VITE_API_URL" ]; then \
+      npm run build; \
+    else \
+      unset VITE_API_URL && npm run build; \
+    fi
 
 FROM nginx:alpine
 
