@@ -1,23 +1,21 @@
 FROM node:20-alpine AS builder
 
 WORKDIR /app
-
 COPY package*.json ./
 RUN npm ci
-
 COPY . .
+
 ARG VITE_API_URL
-RUN if [ -n "$VITE_API_URL" ]; then \
-      npm run build; \
-    else \
-      unset VITE_API_URL && npm run build; \
-    fi
+ENV VITE_API_URL=$VITE_API_URL
 
-FROM nginx:alpine
+RUN npm run build
 
-ARG NGINX_CONF=nginx.conf
+FROM node:20-alpine
 
-COPY ${NGINX_CONF} /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY --from=builder /app/dist ./dist
 
-EXPOSE 80
+EXPOSE 4173
+CMD ["npm", "start"]

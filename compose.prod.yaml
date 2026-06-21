@@ -15,9 +15,7 @@ services:
     image: ghcr.io/tomdupont72/brainleaf-frontend:${APP_VERSION:-latest}
     container_name: brainleaf-frontend
     ports:
-      - "127.0.0.1:5175:80"
-    depends_on:
-      - backend
+      - "127.0.0.1:5175:4173"
     networks:
       - brainleaf
     restart: unless-stopped
@@ -27,10 +25,6 @@ services:
     container_name: brainleaf-worker
     env_file:
       - /etc/brainleaf-worker.env
-    environment:
-      BACKEND_URL: http://backend:8000
-    depends_on:
-      - backend
     networks:
       - brainleaf
       - infrastructure
