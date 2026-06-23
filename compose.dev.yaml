@@ -18,7 +18,7 @@ services:
         VITE_API_URL: http://localhost:8000
     container_name: brainleaf-frontend
     ports:
-      - "127.0.0.1:5173:4173"
+      - "127.0.0.1:5173:80"
     networks:
       - default
     restart: unless-stopped
