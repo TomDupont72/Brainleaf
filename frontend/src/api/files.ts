@@ -1,4 +1,4 @@
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL || "";
 
 export async function apiFileUpload(formData: FormData) {
   const res = await fetch(`${apiUrl}/api/file/upload`, {
