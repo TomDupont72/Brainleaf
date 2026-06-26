@@ -31,7 +31,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v7
         with:
           context: ./backend
           push: true
@@ -40,7 +40,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ steps.meta.outputs.owner }}/brainleaf-backend:${{ env.IMAGE_TAG }}
             ${{ env.REGISTRY }}/${{ steps.meta.outputs.owner }}/brainleaf-backend:latest
 
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v7
         with:
           context: ./frontend
           push: true
@@ -51,7 +51,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ steps.meta.outputs.owner }}/brainleaf-frontend:${{ env.IMAGE_TAG }}
             ${{ env.REGISTRY }}/${{ steps.meta.outputs.owner }}/brainleaf-frontend:latest
       
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v7
         with:
           context: ./worker
           push: true
